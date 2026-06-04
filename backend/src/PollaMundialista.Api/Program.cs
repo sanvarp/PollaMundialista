@@ -17,6 +17,14 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
+builder.Services.AddHealthChecks();
+
+// ---- Observability (Application Insights) -------------------------------
+// Activates only when APPLICATIONINSIGHTS_CONNECTION_STRING is configured.
+if (!string.IsNullOrWhiteSpace(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]))
+{
+    builder.Services.AddApplicationInsightsTelemetry();
+}
 
 // ---- OpenAPI (.NET 10 built-in) + Scalar UI -----------------------------
 builder.Services.AddOpenApi(options =>
@@ -84,6 +92,7 @@ app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health").AllowAnonymous();
 
 // ---- Schema + seed at startup ------------------------------------------
 await DbInitializer.InitializeAsync(app.Services);

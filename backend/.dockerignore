@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+**/.vs/
+**/*.user
+tests/
+*.db
+*.db-shm
+*.db-wal
+Dockerfile
+.dockerignore

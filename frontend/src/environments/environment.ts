@@ -2,5 +2,5 @@
 // For SWA + Container Apps these are separate origins, so a full URL is required.
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://REPLACE_WITH_CONTAINER_APP_URL/api',
+  apiBaseUrl: 'https://ca-polla-api.wittydune-a6d385e7.centralus.azurecontainerapps.io/api',
 };
