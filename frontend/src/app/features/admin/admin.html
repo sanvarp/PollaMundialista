@@ -1,0 +1,27 @@
+<app-header />
+
+<main class="page">
+  <header class="page__head">
+    <p class="page__eyebrow">Panel de administración</p>
+    <h1 class="page__title">Resultados</h1>
+    <p class="page__sub">
+      Carga el marcador final de cada partido. Al guardar, se recalculan los puntos de
+      todas las predicciones y se actualiza la tabla.
+      @if (!loading()) {
+        <span class="page__counts">{{ finishedCount() }} cargados · {{ pendingCount() }} pendientes</span>
+      }
+    </p>
+  </header>
+
+  @if (loading()) {
+    <p class="state">Cargando partidos…</p>
+  } @else if (error()) {
+    <p class="state state--error">{{ error() }}</p>
+  } @else {
+    <div class="rows">
+      @for (m of matches(); track m.id) {
+        <app-result-row [match]="m" (resultSaved)="onResultSaved($event)" />
+      }
+    </div>
+  }
+</main>

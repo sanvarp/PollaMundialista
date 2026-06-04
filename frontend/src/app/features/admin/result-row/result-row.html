@@ -1,0 +1,34 @@
+<div class="row" [class.row--finished]="isFinished()">
+  <div class="row__info">
+    <span class="row__group">Grupo {{ match().group }}</span>
+    <span class="row__match">{{ match().homeTeam.code }} vs {{ match().awayTeam.code }}</span>
+    <time class="row__time">{{ match().kickoffUtc | date: 'd MMM HH:mm' }}</time>
+    @if (isFinished()) {
+      <span class="row__status">Final</span>
+    }
+  </div>
+
+  <div class="row__entry">
+    <div class="stepper">
+      <button type="button" (click)="step('home', -1)" aria-label="menos local">−</button>
+      <span class="stepper__val">{{ home() }}</span>
+      <button type="button" (click)="step('home', 1)" aria-label="más local">+</button>
+    </div>
+    <span class="row__sep">:</span>
+    <div class="stepper">
+      <button type="button" (click)="step('away', -1)" aria-label="menos visitante">−</button>
+      <span class="stepper__val">{{ away() }}</span>
+      <button type="button" (click)="step('away', 1)" aria-label="más visitante">+</button>
+    </div>
+
+    <button type="button" class="row__save" [disabled]="saving()" (click)="save()">
+      {{ saving() ? '…' : isFinished() ? 'Actualizar' : 'Guardar' }}
+    </button>
+
+    @if (justSaved()) {
+      <span class="row__flash">✓</span>
+    } @else if (error()) {
+      <span class="row__error">{{ error() }}</span>
+    }
+  </div>
+</div>

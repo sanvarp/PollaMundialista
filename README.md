@@ -79,7 +79,7 @@ npm start            # ng serve
 - [x] **M1** — Auth (JWT + roles)
 - [x] **M2** — Dominio + seeder
 - [x] **M3** — Predicciones + lógica
-- [ ] **M4** — Admin + recálculo
+- [x] **M4** — Admin + recálculo
 - [ ] **M5** — Leaderboard + historial
 - [ ] **M6** — Design system + motion + hero
 - [ ] **M7** — Deploy (Azure + CI/CD)
