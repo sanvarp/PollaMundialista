@@ -1,0 +1,124 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.auth {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 2rem 1rem;
+}
+
+.auth__card {
+  width: 100%;
+  max-width: 26rem;
+  padding: 2.5rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.auth__eyebrow {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.auth__title {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.auth__subtitle {
+  margin: 0.5rem 0 2rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+form {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+
+  span {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  input {
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+  }
+}
+
+.field__error {
+  color: #ff6b6b;
+  font-size: 0.75rem;
+}
+
+.auth__alert {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  background: rgba(255, 77, 46, 0.12);
+  border: 1px solid rgba(255, 77, 46, 0.4);
+  border-radius: 10px;
+  color: #ffb4a8;
+  font-size: 0.85rem;
+}
+
+.btn {
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):active {
+    transform: translateY(1px);
+  }
+}
+
+.btn--accent {
+  background: var(--accent);
+  color: #0a0b0e;
+}
+
+.auth__switch {
+  margin: 1.75rem 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,45 @@
+<section class="auth">
+  <div class="auth__card">
+    <p class="auth__eyebrow">Polla Mundialista</p>
+    <h1 class="auth__title">Crear cuenta</h1>
+    <p class="auth__subtitle">Únete y arma tu polla del Mundial 2026.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label class="field">
+        <span>Nombre para mostrar</span>
+        <input type="text" formControlName="displayName" autocomplete="nickname" placeholder="Tu nombre" />
+        @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
+          <small class="field__error">Ingresa un nombre (máx. 60 caracteres).</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>Correo</span>
+        <input type="email" formControlName="email" autocomplete="email" placeholder="tu@correo.com" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <small class="field__error">Ingresa un correo válido.</small>
+        }
+      </label>
+
+      <label class="field">
+        <span>Contraseña</span>
+        <input type="password" formControlName="password" autocomplete="new-password" placeholder="Mín. 8, mayús/minús/número" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field__error">Mínimo 8 caracteres, con mayúscula, minúscula y número.</small>
+        }
+      </label>
+
+      @if (error()) {
+        <p class="auth__alert" role="alert">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn btn--accent" [disabled]="loading()">
+        {{ loading() ? 'Creando…' : 'Crear cuenta' }}
+      </button>
+    </form>
+
+    <p class="auth__switch">
+      ¿Ya tienes cuenta? <a routerLink="/login">Entra</a>
+    </p>
+  </div>
+</section>

@@ -26,8 +26,33 @@ _(prompt y diff detallados se añaden en la sesión)_
 
 ---
 
-## 2. _(pendiente)_
+## 2. Bloqueo: OpenAPI/Swagger en .NET 10 (breaking change de namespaces)
+
+**Contexto.** Quería Swagger UI con botón "Authorize" para la demo. Añadí
+`Swashbuckle.AspNetCore` y el build falló: `Microsoft.OpenApi.Models` no existe.
+
+**Diagnóstico.** El template de .NET 10 ya referencia `Microsoft.AspNetCore.OpenApi`,
+que arrastra **Microsoft.OpenApi 2.0**, donde los tipos (`OpenApiInfo`,
+`OpenApiSecurityScheme`, …) se movieron del namespace `Microsoft.OpenApi.Models` al
+namespace raíz `Microsoft.OpenApi`, y Swashbuckle 10 además convive mal con esa versión.
+
+**Decisión / criterio propio.** En vez de pelear con Swashbuckle (ya no es first-party
+desde .NET 9), migré al stack idiomático actual: **OpenAPI integrado (`AddOpenApi`) +
+Scalar** para la UI. Para el "Authorize" implementé un `IOpenApiDocumentTransformer`
+que inyecta el esquema Bearer. Verifiqué el patrón exacto contra la doc oficial de
+Microsoft Learn (no lo escribí de memoria) y lo adapté al proyecto.
+
+**Resultado.** API documentada en `/scalar/v1`, con auth JWT funcional para probar
+endpoints protegidos en vivo. Defensa: "Swashbuckle dejó de ser first-party; usé el
+generador OpenAPI nativo + Scalar, que es la recomendación actual de ASP.NET Core".
+
+### Nota de decisión: base de datos provider-agnóstica
+
+La máquina de build no tenía SQL Server / LocalDB / Docker. En vez de bloquear el
+desarrollo, hice el `DbContext` agnóstico al proveedor: **SQLite en local** (cero
+instalación, `EnsureCreated`) y **Azure SQL en producción** (migraciones EF). Esto
+también beneficia a quien clone el repo público: `dotnet run` y listo.
 
 ---
 
-## 3. _(pendiente)_
+## 3. _(pendiente — lógica de negocio: puntuación 3/1/0 + recálculo / bloqueo por kickoff)_

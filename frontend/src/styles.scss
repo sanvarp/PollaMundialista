@@ -1,1 +1,40 @@
-/* You can add global styles to this file, and also import other style files */
+/* Starter design tokens — the full "broadcast/editorial premium" system lands in M6. */
+:root {
+  /* Surfaces */
+  --bg: #0a0b0e;
+  --surface: #14161b;
+  --border: #23262e;
+
+  /* Text */
+  --text: #f4f5f7;
+  --text-secondary: #9aa0ab;
+
+  /* Single electric accent (lime broadcast) */
+  --accent: #d6ff3f;
+
+  /* Type */
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+}

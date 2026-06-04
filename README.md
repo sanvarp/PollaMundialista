@@ -76,7 +76,7 @@ npm start            # ng serve
 ## Plan de build (milestones)
 
 - [x] **M0** — Scaffold del monorepo
-- [ ] **M1** — Auth (JWT + roles)
+- [x] **M1** — Auth (JWT + roles)
 - [ ] **M2** — Dominio + seeder
 - [ ] **M3** — Predicciones + lógica
 - [ ] **M4** — Admin + recálculo
