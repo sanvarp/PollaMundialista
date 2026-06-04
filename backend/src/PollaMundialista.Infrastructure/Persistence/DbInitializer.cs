@@ -26,6 +26,7 @@ public static class DbInitializer
         var roleManager = sp.GetRequiredService<RoleManager<IdentityRole>>();
         await IdentitySeeder.SeedRolesAsync(roleManager);
 
-        // M2 adds domain data seeding (teams, matches, demo users) here.
+        var userManager = sp.GetRequiredService<UserManager<ApplicationUser>>();
+        await DataSeeder.SeedAsync(db, userManager);
     }
 }

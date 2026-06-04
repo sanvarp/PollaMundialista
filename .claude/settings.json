@@ -4,7 +4,8 @@
       "Bash(dotnet sln *)",
       "Bash(dotnet add *)",
       "Bash(sqllocaldb info *)",
-      "Bash(sqllocaldb versions *)"
+      "Bash(sqllocaldb versions *)",
+      "Bash(dotnet build *)"
     ]
   }
 }

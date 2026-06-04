@@ -77,7 +77,7 @@ npm start            # ng serve
 
 - [x] **M0** — Scaffold del monorepo
 - [x] **M1** — Auth (JWT + roles)
-- [ ] **M2** — Dominio + seeder
+- [x] **M2** — Dominio + seeder
 - [ ] **M3** — Predicciones + lógica
 - [ ] **M4** — Admin + recálculo
 - [ ] **M5** — Leaderboard + historial
@@ -87,4 +87,15 @@ npm start            # ng serve
 
 ## Credenciales demo
 
-_Se añaden con el seeder en M2._
+El seeder crea estos usuarios (idempotente, en el primer arranque):
+
+| Rol | Correo | Contraseña |
+|---|---|---|
+| **Admin** | `admin@polla.com` | `Admin#2026` |
+| **User** | `user@polla.com` | `User#2026` |
+
+Usuarios extra (rol User, contraseña `User#2026`) para poblar el leaderboard:
+`ana@polla.com`, `carlos@polla.com`, `valentina@polla.com`.
+
+El esquema y los datos completos (12 partidos, jornada 1 precargada) se describen en
+[`docs/erd.md`](docs/erd.md).
