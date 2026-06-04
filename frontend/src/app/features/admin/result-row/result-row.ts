@@ -21,6 +21,7 @@ export class ResultRow {
   protected readonly away = linkedSignal(() => this.match().result?.awayGoals ?? 0);
 
   protected readonly saving = signal(false);
+  protected readonly clearing = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly justSaved = signal(false);
 
@@ -30,6 +31,23 @@ export class ResultRow {
     const sig = side === 'home' ? this.home : this.away;
     sig.set(Math.max(0, Math.min(MAX_GOALS, sig() + delta)));
     this.justSaved.set(false);
+  }
+
+  clear(): void {
+    if (this.clearing()) return;
+    this.clearing.set(true);
+    this.error.set(null);
+
+    this.admin.clearResult(this.match().id).subscribe({
+      next: (updated) => {
+        this.clearing.set(false);
+        this.resultSaved.emit(updated);
+      },
+      error: (err) => {
+        this.clearing.set(false);
+        this.error.set(err?.error?.detail ?? 'No se pudo revertir el resultado.');
+      },
+    });
   }
 
   save(): void {

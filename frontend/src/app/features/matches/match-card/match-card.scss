@@ -4,7 +4,10 @@
   border-radius: 14px;
   padding: 1.1rem 1.25rem;
   display: grid;
+  /* top · middle (grows) · footer (anchored) → uniform card heights */
+  grid-template-rows: auto 1fr auto;
   gap: 1rem;
+  min-height: 13.5rem;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
@@ -69,6 +72,7 @@
 .team {
   display: grid;
   gap: 0.15rem;
+  min-width: 0; /* allow ellipsis inside the grid track */
 }
 .team--home {
   text-align: left;
@@ -84,6 +88,10 @@
 .team__name {
   font-size: 0.72rem;
   color: var(--text-secondary);
+  /* keep names on one line so cards stay uniform */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .score {

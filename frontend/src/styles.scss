@@ -94,14 +94,6 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Hide native cursor on devices that have our custom one (pointer + fine) */
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor * {
-    cursor: none !important;
-  }
-}
-
 /* Respect reduced motion: neutralize transitions/animations */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -117,4 +109,34 @@ body::after {
 /* Utility: hide elements pre-animation without layout shift (JS reveals them) */
 .will-reveal {
   opacity: 0;
+}
+
+/* ---- Route transitions (View Transitions API) ---------------------------
+   Smooth cross-fade + subtle vertical drift between pages (e.g. login → app). */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.5s;
+    animation-timing-function: var(--ease-out);
+  }
+
+  ::view-transition-old(root) {
+    animation-name: vt-fade-out;
+  }
+  ::view-transition-new(root) {
+    animation-name: vt-fade-in;
+  }
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.995);
+  }
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }

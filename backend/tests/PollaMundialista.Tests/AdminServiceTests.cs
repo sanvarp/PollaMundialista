@@ -83,6 +83,40 @@ public class AdminServiceTests : IDisposable
         Assert.Equal(404, result.StatusCode);
     }
 
+    [Fact]
+    public async Task ClearResult_reverts_to_scheduled_and_nulls_points()
+    {
+        var home = new Team { Code = "MEX", Name = "México", GroupName = "A" };
+        var away = new Team { Code = "CRO", Name = "Croacia", GroupName = "A" };
+        _db.Teams.AddRange(home, away);
+        _db.Users.Add(new ApplicationUser { Id = "u1", UserName = "u1", DisplayName = "U1" });
+        await _db.SaveChangesAsync();
+
+        var match = new Match
+        {
+            GroupName = "A",
+            HomeTeamId = home.Id,
+            AwayTeamId = away.Id,
+            KickoffUtc = new DateTime(2026, 6, 11, 20, 0, 0, DateTimeKind.Utc),
+            Status = MatchStatus.Scheduled,
+        };
+        _db.Matches.Add(match);
+        await _db.SaveChangesAsync();
+        _db.Predictions.Add(new Prediction { UserId = "u1", MatchId = match.Id, PredHomeGoals = 2, PredAwayGoals = 1 });
+        await _db.SaveChangesAsync();
+
+        var service = new AdminService(_db, TimeProvider.System);
+        await service.SetResultAsync("admin", match.Id, new SetResultRequest(2, 1));
+
+        var cleared = await service.ClearResultAsync("admin", match.Id);
+
+        Assert.True(cleared.Succeeded);
+        Assert.Equal("Scheduled", cleared.Value!.Status);
+        Assert.Null(cleared.Value.Result);
+        var pts = await _db.Predictions.Select(p => p.PointsAwarded).FirstAsync();
+        Assert.Null(pts);
+    }
+
     public void Dispose()
     {
         _db.Dispose();

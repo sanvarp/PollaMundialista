@@ -17,4 +17,9 @@ export class AdminService {
   setResult(matchId: number, body: SetResultRequest): Observable<MatchVm> {
     return this.http.put<MatchVm>(`${this.base}/admin/matches/${matchId}/result`, body);
   }
+
+  /** Reverts a match to "scheduled", clearing its result and points. */
+  clearResult(matchId: number): Observable<MatchVm> {
+    return this.http.delete<MatchVm>(`${this.base}/admin/matches/${matchId}/result`);
+  }
 }

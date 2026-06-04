@@ -21,9 +21,15 @@
       <button type="button" (click)="step('away', 1)" aria-label="más visitante">+</button>
     </div>
 
-    <button type="button" class="row__save" [disabled]="saving()" (click)="save()">
+    <button type="button" class="row__save" [disabled]="saving() || clearing()" (click)="save()">
       {{ saving() ? '…' : isFinished() ? 'Actualizar' : 'Guardar' }}
     </button>
+
+    @if (isFinished()) {
+      <button type="button" class="row__clear" [disabled]="clearing() || saving()" (click)="clear()" title="Revertir a programado y borrar puntos">
+        {{ clearing() ? '…' : 'Revertir' }}
+      </button>
+    }
 
     @if (justSaved()) {
       <span class="row__flash">✓</span>

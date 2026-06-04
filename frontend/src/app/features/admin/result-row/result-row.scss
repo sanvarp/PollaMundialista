@@ -108,6 +108,27 @@
   }
 }
 
+.row__clear {
+  background: none;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
 .row__flash {
   color: var(--accent);
   font-weight: 700;

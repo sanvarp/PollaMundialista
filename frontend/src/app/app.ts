@@ -2,15 +2,11 @@ import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import Lenis from 'lenis';
 import { ScrollTrigger, gsap, reducedMotion, registerGsap } from './core/motion/motion';
-import { Cursor } from './shared/ui/cursor/cursor';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Cursor],
-  template: `
-    <router-outlet />
-    <app-cursor />
-  `,
+  imports: [RouterOutlet],
+  template: '<router-outlet />',
   styles: [':host { display: block; min-height: 100dvh; }'],
 })
 export class App implements AfterViewInit, OnDestroy {

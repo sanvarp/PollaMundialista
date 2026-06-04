@@ -6,7 +6,10 @@
       "Bash(sqllocaldb info *)",
       "Bash(sqllocaldb versions *)",
       "Bash(dotnet build *)",
-      "Bash(dotnet dotnet-ef *)"
+      "Bash(dotnet dotnet-ef *)",
+      "Bash(cd /d/G2C/PollaMundialista/frontend)",
+      "Bash(rm -rf src/app/shared/ui/cursor)",
+      "Bash(npx ng *)"
     ]
   }
 }

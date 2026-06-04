@@ -49,4 +49,33 @@ public class AdminService : IAdminService
         var mine = match.Predictions.FirstOrDefault(p => p.UserId == adminUserId);
         return Result<MatchDto>.Ok(MatchService.MapToDto(match, now, mine));
     }
+
+    public async Task<Result<MatchDto>> ClearResultAsync(string adminUserId, int matchId, CancellationToken ct = default)
+    {
+        var match = await _db.Matches
+            .Include(m => m.HomeTeam)
+            .Include(m => m.AwayTeam)
+            .Include(m => m.Predictions)
+            .FirstOrDefaultAsync(m => m.Id == matchId, ct);
+
+        if (match is null)
+            return Result<MatchDto>.Fail("El partido no existe.", 404);
+
+        var now = _clock.GetUtcNow().UtcDateTime;
+
+        match.HomeGoals = null;
+        match.AwayGoals = null;
+        match.Status = MatchStatus.Scheduled;
+
+        foreach (var prediction in match.Predictions)
+        {
+            prediction.PointsAwarded = null;
+            prediction.UpdatedAtUtc = now;
+        }
+
+        await _db.SaveChangesAsync(ct);
+
+        var mine = match.Predictions.FirstOrDefault(p => p.UserId == adminUserId);
+        return Result<MatchDto>.Ok(MatchService.MapToDto(match, now, mine));
+    }
 }

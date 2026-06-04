@@ -39,4 +39,17 @@ public class AdminController : ControllerBase
             ? Ok(result.Value)
             : Problem(detail: result.Error, statusCode: result.StatusCode);
     }
+
+    /// <summary>Reverts a match to "scheduled", clearing its result and points (undo).</summary>
+    [HttpDelete("matches/{id:int}/result")]
+    [ProducesResponseType(typeof(MatchDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ClearResult(int id, CancellationToken ct)
+    {
+        var result = await _admin.ClearResultAsync(User.GetUserId(), id, ct);
+        return result.Succeeded
+            ? Ok(result.Value)
+            : Problem(detail: result.Error, statusCode: result.StatusCode);
+    }
 }
