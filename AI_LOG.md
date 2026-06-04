@@ -55,4 +55,30 @@ también beneficia a quien clone el repo público: `dotnet run` y listo.
 
 ---
 
-## 3. _(pendiente — lógica de negocio: puntuación 3/1/0 + recálculo / bloqueo por kickoff)_
+## 3. Lógica de negocio: puntuación, recálculo y anti-trampa
+
+**Contexto.** El corazón del dominio: puntuación 3/1/0, recálculo al cargar
+resultados, bloqueo por kickoff y la regla anti-trampa del historial.
+
+**Cómo lo dirigí (no copy-paste).**
+- **Puntuación 3/1/0** la aislé en una función pura de dominio
+  (`ScoreCalculator.Calculate`) usando `Math.Sign(predHome-predAway) ==
+  Math.Sign(actualHome-actualAway)` para el "mismo resultado". Pura → testeable sin
+  base de datos. Escribí tests con los ejemplos exactos del brief (real 2-1: 3-0→1,
+  2-1→3, 1-1→0).
+- **Bloqueo por kickoff** lo modelé como regla de dominio en la entidad
+  (`Match.IsLocked(now)` = `Finished || now >= kickoff`) y lo inyecté con
+  `TimeProvider` para poder testear el "ahora" de forma determinista — no
+  `DateTime.Now` disperso por el código.
+- **Recálculo** (al cargar un resultado, recomputar `PointsAwarded` de todas las
+  predicciones del partido) lo verifiqué con un test de integración contra SQLite
+  in-memory; ahí descubrí (y arreglé) que faltaba sembrar los `AspNetUsers` por la
+  FK de `Predictions` → buen recordatorio de que el modelo relacional sí valida.
+- **Anti-trampa (5.5)**: el `UserHistoryService` oculta a quien no es el dueño las
+  predicciones de partidos que aún no inician, pero mantiene los agregados
+  (puntos/exactos) para no romper la paridad con el leaderboard. Lo verifiqué en vivo:
+  el dueño ve 6 predicciones; un tercero ve solo las 4 de partidos ya jugados.
+
+**Criterio propio.** La IA propone fácil meter la lógica en el controlador; insistí en
+empujarla al dominio/Application (puro y testeable) y en inyectar el reloj. Resultado:
+17 tests verdes que cubren puntuación, bloqueo y recálculo.

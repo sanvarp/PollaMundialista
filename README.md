@@ -81,7 +81,7 @@ npm start            # ng serve
 - [x] **M3** — Predicciones + lógica
 - [x] **M4** — Admin + recálculo
 - [x] **M5** — Leaderboard + historial
-- [ ] **M6** — Design system + motion + hero
+- [x] **M6** — Design system + motion + hero
 - [ ] **M7** — Deploy (Azure + CI/CD)
 - [ ] **M8** — Pulido + README final
 

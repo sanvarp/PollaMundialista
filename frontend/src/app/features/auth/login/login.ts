@@ -2,10 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { SplitRevealDirective } from '../../../core/motion/split-reveal.directive';
+import { ShaderHero } from '../../../shared/ui/shader-hero/shader-hero';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ShaderHero, SplitRevealDirective],
   templateUrl: './login.html',
   styleUrl: './auth.scss',
 })

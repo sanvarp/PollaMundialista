@@ -4,19 +4,25 @@
 }
 
 .auth {
+  position: relative;
   display: grid;
   place-items: center;
   min-height: 100dvh;
   padding: 2rem 1rem;
+  overflow: hidden;
 }
 
 .auth__card {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 26rem;
   padding: 2.5rem 2rem;
-  background: var(--surface);
+  background: rgba(20, 22, 27, 0.72);
   border: 1px solid var(--border);
   border-radius: 16px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.8);
 }
 
 .auth__eyebrow {
@@ -30,9 +36,9 @@
 
 .auth__title {
   margin: 0;
-  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-size: clamp(2.25rem, 7vw, 3rem);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .auth__subtitle {

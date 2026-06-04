@@ -3,8 +3,13 @@
 <main class="page">
   <header class="page__head">
     <p class="page__eyebrow">Clasificación general</p>
-    <h1 class="page__title">Tabla</h1>
-    <p class="page__sub">Toca a un jugador para ver sus predicciones.</p>
+    <h1 class="page__title" splitReveal>Tabla</h1>
+    <div class="page__row">
+      <p class="page__sub">Toca a un jugador para ver sus predicciones.</p>
+      <button type="button" class="refresh" (click)="refresh()" aria-label="Actualizar tabla">
+        <span class="refresh__pulse"></span> En vivo
+      </button>
+    </div>
   </header>
 
   @if (loading()) {
@@ -12,48 +17,51 @@
   } @else if (error()) {
     <p class="state state--error">{{ error() }}</p>
   } @else {
-    @if (podium().length) {
-      <section class="podium" aria-label="Top 3">
-        @for (p of podium(); track p.userId) {
-          <button
-            type="button"
-            class="podium__slot"
-            [class.podium__slot--1]="p.position === 1"
-            [class.podium__slot--2]="p.position === 2"
-            [class.podium__slot--3]="p.position === 3"
-            [class.is-me]="p.userId === myId"
-            (click)="openUser(p.userId)"
-          >
-            <span class="podium__pos">{{ p.position }}</span>
-            <span class="podium__name">{{ p.displayName }}</span>
-            <span class="podium__pts">{{ p.totalPoints }}</span>
-            <span class="podium__lbl">pts · {{ p.exactHits }} exactos</span>
-          </button>
-        }
-      </section>
-    }
-
-    @if (rest().length) {
-      <table class="board">
-        <thead>
-          <tr>
-            <th class="board__rank">#</th>
-            <th>Jugador</th>
-            <th class="board__num">Exactos</th>
-            <th class="board__num">Puntos</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (e of rest(); track e.userId) {
-            <tr [class.is-me]="e.userId === myId" (click)="openUser(e.userId)">
-              <td class="board__rank">{{ e.position }}</td>
-              <td>{{ e.displayName }}</td>
-              <td class="board__num">{{ e.exactHits }}</td>
-              <td class="board__num board__pts">{{ e.totalPoints }}</td>
-            </tr>
+    <div #board>
+      @if (podium().length) {
+        <section class="podium" aria-label="Top 3">
+          @for (p of podium(); track p.userId) {
+            <button
+              type="button"
+              class="podium__slot"
+              [attr.data-flip-id]="p.userId"
+              [class.podium__slot--1]="p.position === 1"
+              [class.podium__slot--2]="p.position === 2"
+              [class.podium__slot--3]="p.position === 3"
+              [class.is-me]="p.userId === myId"
+              (click)="openUser(p.userId)"
+            >
+              <span class="podium__pos">{{ p.position }}</span>
+              <span class="podium__name">{{ p.displayName }}</span>
+              <span class="podium__pts" [countUp]="p.totalPoints"></span>
+              <span class="podium__lbl">pts · {{ p.exactHits }} exactos</span>
+            </button>
           }
-        </tbody>
-      </table>
-    }
+        </section>
+      }
+
+      @if (rest().length) {
+        <table class="board">
+          <thead>
+            <tr>
+              <th class="board__rank">#</th>
+              <th>Jugador</th>
+              <th class="board__num">Exactos</th>
+              <th class="board__num">Puntos</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (e of rest(); track e.userId) {
+              <tr [attr.data-flip-id]="e.userId" [class.is-me]="e.userId === myId" (click)="openUser(e.userId)">
+                <td class="board__rank">{{ e.position }}</td>
+                <td>{{ e.displayName }}</td>
+                <td class="board__num">{{ e.exactHits }}</td>
+                <td class="board__num board__pts"><span [countUp]="e.totalPoints"></span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
   }
 </main>

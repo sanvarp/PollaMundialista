@@ -1,7 +1,8 @@
 <section class="auth">
+  <app-shader-hero />
   <div class="auth__card">
     <p class="auth__eyebrow">Polla Mundialista</p>
-    <h1 class="auth__title">Entrar</h1>
+    <h1 class="auth__title" splitReveal>Entrar</h1>
     <p class="auth__subtitle">Predice. Suma puntos. Domina el ranking.</p>
 
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate>

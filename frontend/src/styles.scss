@@ -1,9 +1,15 @@
-/* Starter design tokens — the full "broadcast/editorial premium" system lands in M6. */
+/* ============================================================
+   Polla Mundialista — "broadcast / editorial premium" system
+   Dark, high-contrast, big type, expressive numbers.
+   ============================================================ */
+
 :root {
   /* Surfaces */
   --bg: #0a0b0e;
   --surface: #14161b;
+  --surface-2: #181b21;
   --border: #23262e;
+  --border-strong: #2f333d;
 
   /* Text */
   --text: #f4f5f7;
@@ -11,10 +17,18 @@
 
   /* Single electric accent (lime broadcast) */
   --accent: #d6ff3f;
+  --accent-ink: #0a0b0e;
+
+  /* Semantic */
+  --danger: #ff6b57;
 
   /* Type */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -27,14 +41,80 @@ body {
   padding: 0;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 a {
   color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Accent text selection */
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Visible keyboard focus */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Film grain overlay — subtle "broadcast" texture, non-interactive */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Hide native cursor on devices that have our custom one (pointer + fine) */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* Respect reduced motion: neutralize transitions/animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility: hide elements pre-animation without layout shift (JS reveals them) */
+.will-reveal {
+  opacity: 0;
 }

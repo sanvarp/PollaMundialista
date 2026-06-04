@@ -3,7 +3,7 @@
 <main class="page">
   <header class="page__head">
     <p class="page__eyebrow">Fase de grupos · Mundial 2026</p>
-    <h1 class="page__title">Partidos</h1>
+    <h1 class="page__title" splitReveal>Partidos</h1>
     <p class="page__sub">
       Predice el marcador exacto. Aciertas el marcador → <strong>3 pts</strong>,
       aciertas el resultado → <strong>1 pt</strong>.
@@ -23,7 +23,7 @@
         <h2 class="group__title">Grupo {{ g.group }}</h2>
         <div class="group__grid">
           @for (m of g.matches; track m.id) {
-            <app-match-card [match]="m" (predictionSaved)="onPredictionSaved($event)" />
+            <app-match-card revealOnScroll [match]="m" (predictionSaved)="onPredictionSaved($event)" />
           }
         </div>
       </section>

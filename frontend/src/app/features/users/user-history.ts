@@ -1,12 +1,14 @@
 import { Component, OnInit, inject, input, signal } from '@angular/core';
 import { LeaderboardService } from '../../core/api/leaderboard.service';
+import { CountUpDirective } from '../../core/motion/count-up.directive';
+import { SplitRevealDirective } from '../../core/motion/split-reveal.directive';
 import { UserHistory } from '../../core/models/leaderboard.models';
 import { AppHeader } from '../../shared/ui/app-header/app-header';
 import { HistoryRow } from './history-row/history-row';
 
 @Component({
   selector: 'app-user-history',
-  imports: [AppHeader, HistoryRow],
+  imports: [AppHeader, HistoryRow, CountUpDirective, SplitRevealDirective],
   templateUrl: './user-history.html',
   styleUrl: './user-history.scss',
 })

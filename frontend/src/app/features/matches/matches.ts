@@ -1,4 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { RevealOnScrollDirective } from '../../core/motion/reveal-on-scroll.directive';
+import { SplitRevealDirective } from '../../core/motion/split-reveal.directive';
 import { MatchesService } from '../../core/api/matches.service';
 import { MatchVm, MyPrediction } from '../../core/models/match.models';
 import { AppHeader } from '../../shared/ui/app-header/app-header';
@@ -6,7 +8,7 @@ import { MatchCard } from './match-card/match-card';
 
 @Component({
   selector: 'app-matches',
-  imports: [AppHeader, MatchCard],
+  imports: [AppHeader, MatchCard, SplitRevealDirective, RevealOnScrollDirective],
   templateUrl: './matches.html',
   styleUrl: './matches.scss',
 })
