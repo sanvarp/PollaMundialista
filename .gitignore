@@ -1,0 +1,45 @@
+# ---------- .NET ----------
+bin/
+obj/
+*.user
+*.suo
+.vs/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+*.dll
+*.pdb
+
+# EF Core / local secrets
+appsettings.*.local.json
+*.db
+*.db-shm
+*.db-wal
+
+# ---------- Node / Angular ----------
+node_modules/
+dist/
+.angular/
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# ---------- Environment & secrets ----------
+.env
+.env.*
+!.env.example
+*.pfx
+*.key
+secrets.json
+
+# ---------- Editors / OS ----------
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Keep VS Code shared config but ignore local
+.vscode/*
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
