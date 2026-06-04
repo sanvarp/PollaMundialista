@@ -29,6 +29,9 @@ public static class DependencyInjection
                 options.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName));
         });
 
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<AppDbContext>());
+        services.AddSingleton(TimeProvider.System);
+
         // --- Identity ------------------------------------------------------
         services.AddIdentityCore<ApplicationUser>(options =>
             {

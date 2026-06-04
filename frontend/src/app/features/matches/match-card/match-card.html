@@ -1,0 +1,85 @@
+<article class="card" [class.card--locked]="locked() && !hasResult()" [class.card--played]="hasResult()">
+  <div class="card__top">
+    <span class="card__group">Grupo {{ match().group }}</span>
+    @if (hasResult()) {
+      <span class="badge badge--played">Final</span>
+    } @else if (locked()) {
+      <span class="badge badge--locked">Cerrado</span>
+    } @else {
+      <span class="badge badge--open">Abierto</span>
+    }
+    <time class="card__time">{{ match().kickoffUtc | date: 'EEE d MMM · HH:mm' }}</time>
+  </div>
+
+  <div class="card__teams">
+    <!-- Home -->
+    <div class="team team--home">
+      <span class="team__code">{{ match().homeTeam.code }}</span>
+      <span class="team__name">{{ match().homeTeam.name }}</span>
+    </div>
+
+    <!-- Center: result or prediction -->
+    <div class="score">
+      @if (hasResult()) {
+        <div class="score__line score__line--result">
+          <span>{{ match().result!.homeGoals }}</span>
+          <span class="score__sep">:</span>
+          <span>{{ match().result!.awayGoals }}</span>
+        </div>
+        <span class="score__label">Resultado</span>
+      } @else if (editable()) {
+        <div class="stepper-pair">
+          <div class="stepper">
+            <button type="button" (click)="step('home', -1)" aria-label="menos local">−</button>
+            <span class="stepper__val">{{ home() }}</span>
+            <button type="button" (click)="step('home', 1)" aria-label="más local">+</button>
+          </div>
+          <span class="score__sep">:</span>
+          <div class="stepper">
+            <button type="button" (click)="step('away', -1)" aria-label="menos visitante">−</button>
+            <span class="stepper__val">{{ away() }}</span>
+            <button type="button" (click)="step('away', 1)" aria-label="más visitante">+</button>
+          </div>
+        </div>
+      } @else {
+        <div class="score__line">
+          <span>{{ home() }}</span>
+          <span class="score__sep">:</span>
+          <span>{{ away() }}</span>
+        </div>
+        <span class="score__label">Tu predicción</span>
+      }
+    </div>
+
+    <!-- Away -->
+    <div class="team team--away">
+      <span class="team__code">{{ match().awayTeam.code }}</span>
+      <span class="team__name">{{ match().awayTeam.name }}</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="card__footer">
+    @if (hasResult()) {
+      @if (match().myPrediction) {
+        <span class="mypred">Tu: {{ match().myPrediction!.homeGoals }}–{{ match().myPrediction!.awayGoals }}</span>
+        <span class="points" [class.points--3]="match().myPrediction!.pointsAwarded === 3" [class.points--1]="match().myPrediction!.pointsAwarded === 1">
+          +{{ match().myPrediction!.pointsAwarded ?? 0 }} pts
+        </span>
+      } @else {
+        <span class="mypred mypred--none">No predijiste este partido</span>
+      }
+    } @else if (editable()) {
+      @if (error()) {
+        <span class="card__error" role="alert">{{ error() }}</span>
+      } @else if (justSaved()) {
+        <span class="card__saved">✓ Guardada</span>
+      }
+      <button type="button" class="save" [disabled]="saving() || !dirty()" (click)="save()">
+        {{ saving() ? 'Guardando…' : match().myPrediction ? 'Actualizar' : 'Predecir' }}
+      </button>
+    } @else {
+      <span class="mypred mypred--none">Predicciones cerradas</span>
+    }
+  </div>
+</article>

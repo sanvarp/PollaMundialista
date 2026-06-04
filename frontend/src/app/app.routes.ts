@@ -15,8 +15,8 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [authGuard],
-    loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
-    title: 'Inicio · Polla Mundialista',
+    loadComponent: () => import('./features/matches/matches').then((m) => m.Matches),
+    title: 'Partidos · Polla Mundialista',
   },
   {
     path: 'admin',

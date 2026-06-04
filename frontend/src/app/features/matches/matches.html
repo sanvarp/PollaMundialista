@@ -1,0 +1,32 @@
+<app-header />
+
+<main class="page">
+  <header class="page__head">
+    <p class="page__eyebrow">Fase de grupos · Mundial 2026</p>
+    <h1 class="page__title">Partidos</h1>
+    <p class="page__sub">
+      Predice el marcador exacto. Aciertas el marcador → <strong>3 pts</strong>,
+      aciertas el resultado → <strong>1 pt</strong>.
+      @if (openCount() > 0) {
+        <span class="page__open">{{ openCount() }} abiertos para predecir.</span>
+      }
+    </p>
+  </header>
+
+  @if (loading()) {
+    <p class="state">Cargando partidos…</p>
+  } @else if (error()) {
+    <p class="state state--error">{{ error() }}</p>
+  } @else {
+    @for (g of groups(); track g.group) {
+      <section class="group">
+        <h2 class="group__title">Grupo {{ g.group }}</h2>
+        <div class="group__grid">
+          @for (m of g.matches; track m.id) {
+            <app-match-card [match]="m" (predictionSaved)="onPredictionSaved($event)" />
+          }
+        </div>
+      </section>
+    }
+  }
+</main>

@@ -78,7 +78,7 @@ npm start            # ng serve
 - [x] **M0** — Scaffold del monorepo
 - [x] **M1** — Auth (JWT + roles)
 - [x] **M2** — Dominio + seeder
-- [ ] **M3** — Predicciones + lógica
+- [x] **M3** — Predicciones + lógica
 - [ ] **M4** — Admin + recálculo
 - [ ] **M5** — Leaderboard + historial
 - [ ] **M6** — Design system + motion + hero

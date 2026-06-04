@@ -1,0 +1,95 @@
+.hdr {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+  border-bottom: 1px solid var(--border);
+  background: rgba(10, 11, 14, 0.8);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.hdr__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.hdr__brand-accent {
+  color: var(--accent);
+}
+
+.hdr__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+.hdr__nav {
+  display: flex;
+  gap: 1.25rem;
+  margin-right: auto;
+
+  a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--text);
+    }
+
+    &.is-active {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+  }
+}
+
+.hdr__user {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.hdr__name {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.hdr__logout {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.45rem 0.85rem;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent);
+  }
+}
+
+@media (max-width: 520px) {
+  .hdr {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .hdr__name {
+    display: none;
+  }
+}
