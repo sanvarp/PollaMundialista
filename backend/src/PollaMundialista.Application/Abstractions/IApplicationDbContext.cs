@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PollaMundialista.Application.Common;
 using PollaMundialista.Domain.Entities;
 
 namespace PollaMundialista.Application.Abstractions;
@@ -13,6 +14,9 @@ public interface IApplicationDbContext
     DbSet<Team> Teams { get; }
     DbSet<Match> Matches { get; }
     DbSet<Prediction> Predictions { get; }
+
+    /// <summary>Read-only projection of Identity users (id + display name), composable in queries.</summary>
+    IQueryable<UserSummary> UserSummaries { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

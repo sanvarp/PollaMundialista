@@ -19,6 +19,18 @@ export const routes: Routes = [
     title: 'Partidos · Polla Mundialista',
   },
   {
+    path: 'leaderboard',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/leaderboard/leaderboard').then((m) => m.Leaderboard),
+    title: 'Tabla · Polla Mundialista',
+  },
+  {
+    path: 'users/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/users/user-history').then((m) => m.UserHistoryPage),
+    title: 'Historial · Polla Mundialista',
+  },
+  {
     path: 'admin',
     canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/admin').then((m) => m.Admin),

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PollaMundialista.Application.Abstractions;
+using PollaMundialista.Application.Common;
 using PollaMundialista.Domain.Entities;
 using PollaMundialista.Infrastructure.Identity;
 
@@ -24,6 +25,10 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole, str
     public DbSet<Team> Teams => Set<Team>();
     public DbSet<Match> Matches => Set<Match>();
     public DbSet<Prediction> Predictions => Set<Prediction>();
+
+    // Projects Identity users to the Application-facing summary (composes server-side).
+    public IQueryable<UserSummary> UserSummaries =>
+        Users.Select(u => new UserSummary(u.Id, u.DisplayName));
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

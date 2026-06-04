@@ -1,0 +1,33 @@
+<app-header />
+
+<main class="page">
+  @if (loading()) {
+    <p class="state">Cargando historial…</p>
+  } @else if (error()) {
+    <p class="state state--error">{{ error() }}</p>
+  } @else if (history(); as h) {
+    <header class="uhead">
+      <p class="uhead__eyebrow">{{ h.isOwnerView ? 'Tus predicciones' : 'Predicciones de' }}</p>
+      <h1 class="uhead__name">{{ h.displayName }}</h1>
+      <div class="uhead__stats">
+        <span class="stat"><strong>{{ h.totalPoints }}</strong> puntos</span>
+        <span class="stat"><strong>{{ h.exactHits }}</strong> exactos</span>
+      </div>
+      @if (!h.isOwnerView) {
+        <p class="uhead__note">
+          🔒 Por juego limpio, solo se muestran las predicciones de partidos que ya iniciaron.
+        </p>
+      }
+    </header>
+
+    @if (h.predictions.length) {
+      <div class="rows">
+        @for (e of h.predictions; track e.matchId) {
+          <app-history-row [entry]="e" />
+        }
+      </div>
+    } @else {
+      <p class="state">Aún no hay predicciones visibles.</p>
+    }
+  }
+</main>

@@ -1,0 +1,90 @@
+.hrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  flex-wrap: wrap;
+}
+.hrow--played {
+  border-color: rgba(214, 255, 63, 0.2);
+}
+
+.hrow__match {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.hrow__group {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0a0b0e;
+  background: var(--text-secondary);
+  padding: 0.15rem 0.4rem;
+  border-radius: 5px;
+}
+.hrow__teams {
+  font-weight: 600;
+}
+.hrow__time {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.hrow__scores {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.hrow__pred,
+.hrow__result {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+}
+.hrow__lbl {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+.hrow__val {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.hrow__val--result {
+  color: var(--accent);
+}
+
+.hrow__pts {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  min-width: 2.5rem;
+  text-align: center;
+}
+.hrow__pts--1 {
+  color: var(--text);
+  border-color: #3a3f49;
+}
+.hrow__pts--3 {
+  color: #0a0b0e;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.hrow__pending {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}

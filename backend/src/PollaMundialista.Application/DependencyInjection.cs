@@ -1,8 +1,10 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PollaMundialista.Application.Admin;
+using PollaMundialista.Application.Leaderboard;
 using PollaMundialista.Application.Matches;
 using PollaMundialista.Application.Predictions;
+using PollaMundialista.Application.Users;
 
 namespace PollaMundialista.Application;
 
@@ -16,6 +18,8 @@ public static class DependencyInjection
         services.AddScoped<IMatchService, MatchService>();
         services.AddScoped<IPredictionService, PredictionService>();
         services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<ILeaderboardService, LeaderboardService>();
+        services.AddScoped<IUserHistoryService, UserHistoryService>();
 
         return services;
     }
