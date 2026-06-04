@@ -5,6 +5,7 @@ name: Deploy
 on:
   push:
     branches: [main]
+    paths-ignore: ['**.md', 'docs/**', 'AI_LOG.md', '.gitignore', '.gitattributes']
   workflow_dispatch:
 
 permissions:

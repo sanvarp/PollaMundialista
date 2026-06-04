@@ -82,3 +82,29 @@ resultados, bloqueo por kickoff y la regla anti-trampa del historial.
 **Criterio propio.** La IA propone fácil meter la lógica en el controlador; insistí en
 empujarla al dominio/Application (puro y testeable) y en inyectar el reloj. Resultado:
 17 tests verdes que cubren puntuación, bloqueo y recálculo.
+
+---
+
+## 4. Despliegue real en Azure + pipeline (bloqueos sorteados en vivo)
+
+**Contexto.** Llevar la app a producción en Azure (SWA + Container Apps + SQL Serverless)
+y dejar un pipeline de GitHub Actions con OIDC y tests como gate.
+
+**Bloqueos reales y cómo los resolví (con criterio, no a ciegas):**
+- **RG con `LOCK-READONLY`** (patrón de gobernanza en casi todos los RGs de la
+  suscripción). No lo quité unilateralmente: lo señalé, pedí autorización explícita, y
+  además advertí que un lock ReadOnly **bloquea al propio pipeline** para actualizar
+  recursos → debe quedar desactivado (o ser CanNotDelete) mientras esté desplegado.
+- **Sin capacidad de Azure SQL ni Container Apps en East US / East US 2** ese día
+  (`RegionDoesNotAllowProvisioning`, `AKSCapacityHeavyUsage`). En vez de quedarme
+  trabado, hice un **loop por regiones** y caí en **centralus**, co-ubicando SQL +
+  Container Apps para minimizar latencia (ACR/monitoreo quedaron en eastus2).
+- **Sin Docker local** → construí la imagen con **`az acr build`** (build en la nube);
+  el mismo Dockerfile multistage corre idéntico en el pipeline.
+- **OIDC en vez de secreto de larga vida**: app registration + federated credential
+  (`repo:sanvarp/PollaMundialista:ref:refs/heads/main`) + Contributor *solo* en el RG.
+  El primer `role assignment` falló por propagación del SP; reintenté con
+  `--assignee-object-id` + `--assignee-principal-type` y entró.
+
+**Resultado.** App **live** y verificada end-to-end (health, login, leaderboard, CORS),
+con pipeline `test → deploy-api → deploy-frontend` en verde a la primera.

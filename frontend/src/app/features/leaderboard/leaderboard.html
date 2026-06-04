@@ -52,7 +52,16 @@
           </thead>
           <tbody>
             @for (e of rest(); track e.userId) {
-              <tr [attr.data-flip-id]="e.userId" [class.is-me]="e.userId === myId" (click)="openUser(e.userId)">
+              <tr
+                [attr.data-flip-id]="e.userId"
+                [class.is-me]="e.userId === myId"
+                tabindex="0"
+                role="button"
+                [attr.aria-label]="'Ver predicciones de ' + e.displayName"
+                (click)="openUser(e.userId)"
+                (keydown.enter)="openUser(e.userId)"
+                (keydown.space)="openUser(e.userId)"
+              >
                 <td class="board__rank">{{ e.position }}</td>
                 <td>{{ e.displayName }}</td>
                 <td class="board__num">{{ e.exactHits }}</td>
