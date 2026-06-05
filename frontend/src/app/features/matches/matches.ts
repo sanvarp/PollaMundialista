@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RevealOnScrollDirective } from '../../core/motion/reveal-on-scroll.directive';
 import { SplitRevealDirective } from '../../core/motion/split-reveal.directive';
@@ -8,7 +9,7 @@ import { MatchCard } from './match-card/match-card';
 
 @Component({
   selector: 'app-matches',
-  imports: [AppHeader, MatchCard, SplitRevealDirective, RevealOnScrollDirective],
+  imports: [AppHeader, MatchCard, SplitRevealDirective, RevealOnScrollDirective, DatePipe],
   templateUrl: './matches.html',
   styleUrl: './matches.scss',
 })
@@ -19,6 +20,9 @@ export class Matches {
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
 
+  /** 'group' = by group letter · 'date' = chronological by kickoff (play order). */
+  protected readonly view = signal<'group' | 'date'>('group');
+
   /** Matches grouped by group label, for sectioned rendering. */
   protected readonly groups = computed(() => {
     const byGroup = new Map<string, MatchVm[]>();
@@ -28,7 +32,28 @@ export class Matches {
     return [...byGroup.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([group, matches]) => ({ group, matches }));
   });
 
+  /** Matches grouped by calendar day (local), in kickoff order. */
+  protected readonly days = computed(() => {
+    const sorted = [...this.matches()].sort((a, b) => a.kickoffUtc.localeCompare(b.kickoffUtc));
+    const days: { key: string; date: string; matches: MatchVm[] }[] = [];
+    for (const m of sorted) {
+      const d = new Date(m.kickoffUtc);
+      const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+      let day = days.find((x) => x.key === key);
+      if (!day) {
+        day = { key, date: m.kickoffUtc, matches: [] };
+        days.push(day);
+      }
+      day.matches.push(m);
+    }
+    return days;
+  });
+
   protected readonly openCount = computed(() => this.matches().filter((m) => !m.isLocked).length);
+
+  setView(mode: 'group' | 'date'): void {
+    this.view.set(mode);
+  }
 
   constructor() {
     this.load();

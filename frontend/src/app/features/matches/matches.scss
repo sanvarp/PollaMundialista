@@ -39,6 +39,37 @@
   margin-left: 0.25rem;
 }
 
+/* View toggle (por grupo / por fecha) */
+.seg {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+
+  button {
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+      color: var(--text);
+    }
+    &.is-active {
+      background: var(--accent);
+      color: #0a0b0e;
+      font-weight: 600;
+    }
+  }
+}
+
 .group {
   margin-top: 2.5rem;
 }
@@ -49,6 +80,9 @@
   margin: 0 0 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border);
+}
+.group__title--day {
+  text-transform: capitalize;
 }
 
 .group__grid {

@@ -18,15 +18,33 @@
   } @else if (error()) {
     <p class="state state--error">{{ error() }}</p>
   } @else {
-    @for (g of groups(); track g.group) {
-      <section class="group">
-        <h2 class="group__title">Grupo {{ g.group }}</h2>
-        <div class="group__grid">
-          @for (m of g.matches; track m.id) {
-            <app-match-card revealOnScroll [match]="m" (predictionSaved)="onPredictionSaved($event)" />
-          }
-        </div>
-      </section>
+    <div class="seg" role="group" aria-label="Cambiar vista de partidos">
+      <button type="button" [class.is-active]="view() === 'group'" (click)="setView('group')">Por grupo</button>
+      <button type="button" [class.is-active]="view() === 'date'" (click)="setView('date')">Por fecha</button>
+    </div>
+
+    @if (view() === 'group') {
+      @for (g of groups(); track g.group) {
+        <section class="group">
+          <h2 class="group__title">Grupo {{ g.group }}</h2>
+          <div class="group__grid">
+            @for (m of g.matches; track m.id) {
+              <app-match-card revealOnScroll [match]="m" (predictionSaved)="onPredictionSaved($event)" />
+            }
+          </div>
+        </section>
+      }
+    } @else {
+      @for (d of days(); track d.key) {
+        <section class="group">
+          <h2 class="group__title group__title--day">{{ d.date | date: 'EEEE d MMM' }}</h2>
+          <div class="group__grid">
+            @for (m of d.matches; track m.id) {
+              <app-match-card revealOnScroll [match]="m" (predictionSaved)="onPredictionSaved($event)" />
+            }
+          </div>
+        </section>
+      }
     }
   }
 </main>
