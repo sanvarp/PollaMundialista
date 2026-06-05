@@ -19,6 +19,12 @@ export const routes: Routes = [
     title: 'Partidos · Polla Mundialista',
   },
   {
+    path: 'standings',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/standings/standings').then((m) => m.Standings),
+    title: 'Grupos · Polla Mundialista',
+  },
+  {
     path: 'leaderboard',
     canActivate: [authGuard],
     loadComponent: () => import('./features/leaderboard/leaderboard').then((m) => m.Leaderboard),

@@ -4,6 +4,7 @@ using PollaMundialista.Application.Admin;
 using PollaMundialista.Application.Leaderboard;
 using PollaMundialista.Application.Matches;
 using PollaMundialista.Application.Predictions;
+using PollaMundialista.Application.Standings;
 using PollaMundialista.Application.Users;
 
 namespace PollaMundialista.Application;
@@ -20,6 +21,7 @@ public static class DependencyInjection
         services.AddScoped<IAdminService, AdminService>();
         services.AddScoped<ILeaderboardService, LeaderboardService>();
         services.AddScoped<IUserHistoryService, UserHistoryService>();
+        services.AddScoped<IStandingsService, StandingsService>();
 
         return services;
     }

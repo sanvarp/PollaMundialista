@@ -1,0 +1,127 @@
+.page {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 4rem;
+}
+
+.page__head {
+  margin-bottom: 2.5rem;
+}
+.page__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.4rem;
+}
+.page__title {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.page__sub {
+  margin: 0.6rem 0 0;
+  color: var(--text-secondary);
+}
+.page__hint {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  gap: 2rem;
+}
+
+.grp__title {
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.75rem;
+}
+
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.tbl th {
+  text-align: right;
+  font-weight: 500;
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.tbl th:nth-child(2) {
+  text-align: left;
+}
+.tbl td {
+  padding: 0.7rem 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tbl__pos {
+  width: 1.8rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+.tbl__num {
+  text-align: right;
+  font-family: var(--font-mono);
+}
+.tbl__team {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.tbl__code {
+  font-weight: 700;
+}
+.tbl__name {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tbl__pts {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Top-2 advance: subtle accent marker */
+.tbl__top .tbl__pos {
+  color: var(--accent);
+  position: relative;
+}
+.tbl__top .tbl__pos::before {
+  content: '';
+  position: absolute;
+  left: -0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 1.1rem;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.state {
+  color: var(--text-secondary);
+  padding: 2rem 0;
+}
+.state--error {
+  color: #ff8a7a;
+}
+
+@media (max-width: 560px) {
+  .tbl__hide {
+    display: none;
+  }
+}

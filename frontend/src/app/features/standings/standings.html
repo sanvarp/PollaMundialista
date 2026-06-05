@@ -1,0 +1,63 @@
+<app-header />
+
+<main class="page">
+  <header class="page__head">
+    <p class="page__eyebrow">Fase de grupos · Mundial 2026</p>
+    <h1 class="page__title" splitReveal>Grupos</h1>
+    <p class="page__sub">
+      Posiciones calculadas a partir de los resultados cargados.
+      @if (!loading() && !anyPlayed()) {
+        <span class="page__hint">Aún sin partidos jugados.</span>
+      }
+    </p>
+  </header>
+
+  @if (loading()) {
+    <p class="state">Cargando tablas…</p>
+  } @else if (error()) {
+    <p class="state state--error">{{ error() }}</p>
+  } @else {
+    <div class="groups">
+      @for (g of groups(); track g.group) {
+        <section class="grp">
+          <h2 class="grp__title">Grupo {{ g.group }}</h2>
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th class="tbl__pos">#</th>
+                <th>Equipo</th>
+                <th class="tbl__num" title="Jugados">PJ</th>
+                <th class="tbl__num tbl__hide" title="Ganados">G</th>
+                <th class="tbl__num tbl__hide" title="Empatados">E</th>
+                <th class="tbl__num tbl__hide" title="Perdidos">P</th>
+                <th class="tbl__num tbl__hide" title="Goles a favor">GF</th>
+                <th class="tbl__num tbl__hide" title="Goles en contra">GC</th>
+                <th class="tbl__num" title="Diferencia">Dif</th>
+                <th class="tbl__num tbl__pts" title="Puntos">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of g.rows; track r.code; let i = $index) {
+                <tr [class.tbl__top]="i < 2">
+                  <td class="tbl__pos">{{ i + 1 }}</td>
+                  <td class="tbl__team">
+                    <span class="tbl__code">{{ r.code }}</span>
+                    <span class="tbl__name">{{ r.name }}</span>
+                  </td>
+                  <td class="tbl__num">{{ r.played }}</td>
+                  <td class="tbl__num tbl__hide">{{ r.won }}</td>
+                  <td class="tbl__num tbl__hide">{{ r.drawn }}</td>
+                  <td class="tbl__num tbl__hide">{{ r.lost }}</td>
+                  <td class="tbl__num tbl__hide">{{ r.goalsFor }}</td>
+                  <td class="tbl__num tbl__hide">{{ r.goalsAgainst }}</td>
+                  <td class="tbl__num">{{ r.goalDifference > 0 ? '+' : '' }}{{ r.goalDifference }}</td>
+                  <td class="tbl__num tbl__pts">{{ r.points }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </section>
+      }
+    </div>
+  }
+</main>
