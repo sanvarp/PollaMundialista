@@ -6,7 +6,7 @@
     } @else if (locked()) {
       <span class="badge badge--locked">Cerrado</span>
     } @else {
-      <span class="badge badge--open">Abierto</span>
+      <span class="badge badge--open">{{ countdown() ? 'Cierra en ' + countdown() : 'Abierto' }}</span>
     }
     <time class="card__time">{{ match().kickoffUtc | date: 'EEE d MMM · HH:mm' }}</time>
   </div>

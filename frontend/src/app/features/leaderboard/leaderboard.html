@@ -17,6 +17,15 @@
   } @else if (error()) {
     <p class="state state--error">{{ error() }}</p>
   } @else {
+    @if (me(); as m) {
+      <button type="button" class="mepos" (click)="openUser(m.userId)">
+        <span class="mepos__tag">Tú</span>
+        <span class="mepos__rank">#{{ m.position }}</span>
+        <span class="mepos__name">{{ m.displayName }}</span>
+        <span class="mepos__pts">{{ m.totalPoints }} pts · {{ m.exactHits }} exactos</span>
+      </button>
+    }
+
     <div #board>
       @if (podium().length) {
         <section class="podium" aria-label="Top 3">
@@ -31,7 +40,7 @@
               [class.is-me]="p.userId === myId"
               (click)="openUser(p.userId)"
             >
-              <span class="podium__pos">{{ p.position }}</span>
+              <span class="podium__pos">{{ p.position }}@if (p.userId === myId) { <span class="tag-you">Tú</span> }</span>
               <span class="podium__name">{{ p.displayName }}</span>
               <span class="podium__pts" [countUp]="p.totalPoints"></span>
               <span class="podium__lbl">pts · {{ p.exactHits }} exactos</span>
@@ -63,7 +72,7 @@
                 (keydown.space)="openUser(e.userId)"
               >
                 <td class="board__rank">{{ e.position }}</td>
-                <td>{{ e.displayName }}</td>
+                <td>{{ e.displayName }}@if (e.userId === myId) { <span class="tag-you">Tú</span> }</td>
                 <td class="board__num">{{ e.exactHits }}</td>
                 <td class="board__num board__pts"><span [countUp]="e.totalPoints"></span></td>
               </tr>

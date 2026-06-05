@@ -22,7 +22,22 @@ Suscripción **GoToCloudAI**, RG `rg-nexusfanatix-poc-eus2-001`:
 > capacidad para crearlos el día del despliegue. La autenticación del pipeline a Azure
 > es por **OIDC** (sin secretos de larga vida).
 
-## Evolución (IaC)
+## IaC (Bicep)
 
-Como siguiente paso, este stack se puede capturar en **Bicep** para provisión
-reproducible. Hoy fue provisionado con `az` CLI (ver `docs/architecture.md`).
+El stack completo está capturado en [`main.bicep`](main.bicep) (parámetros de ejemplo en
+[`main.bicepparam`](main.bicepparam)): ACR, Container Apps (env + app), Azure SQL
+Serverless, Static Web App, Application Insights y Log Analytics.
+
+```bash
+# Validar (sin desplegar)
+az bicep build --file infra/main.bicep
+
+# Desplegar
+az deployment group create -g rg-nexusfanatix-poc-eus2-001 -f infra/main.bicep \
+  -p sqlAdminPassword=<pwd> jwtSecret=<secret> \
+     containerImage=acrpollauy1a9v.azurecr.io/polla-api:latest \
+     frontendOrigin=https://gray-grass-037160b0f.7.azurestaticapps.net
+```
+
+> El despliegue actual se hizo con `az` CLI (por restricciones de capacidad regional ese
+> día); el Bicep documenta la topología de forma reproducible.

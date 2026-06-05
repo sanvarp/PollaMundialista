@@ -129,6 +129,34 @@
   }
 }
 
+.row__confirm {
+  font-size: 0.78rem;
+  color: var(--danger);
+}
+.row__yes,
+.row__no {
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+.row__yes {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.row__no:hover {
+  border-color: var(--accent);
+}
+
 .row__flash {
   color: var(--accent);
   font-weight: 700;

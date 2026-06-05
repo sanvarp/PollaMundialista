@@ -36,6 +36,9 @@ export class Leaderboard {
   });
   protected readonly rest = computed(() => this.entries().slice(3));
 
+  /** The current user's own entry, for the "your position" summary. */
+  protected readonly me = computed(() => this.entries().find((e) => e.userId === this.myId) ?? null);
+
   constructor() {
     registerGsap();
     this.load(true);

@@ -26,9 +26,17 @@
     </button>
 
     @if (isFinished()) {
-      <button type="button" class="row__clear" [disabled]="clearing() || saving()" (click)="clear()" title="Revertir a programado y borrar puntos">
-        {{ clearing() ? '…' : 'Revertir' }}
-      </button>
+      @if (confirming()) {
+        <span class="row__confirm">¿Revertir?</span>
+        <button type="button" class="row__yes" [disabled]="clearing()" (click)="clear()">
+          {{ clearing() ? '…' : 'Sí' }}
+        </button>
+        <button type="button" class="row__no" [disabled]="clearing()" (click)="cancelClear()">No</button>
+      } @else {
+        <button type="button" class="row__clear" [disabled]="saving()" (click)="askClear()" title="Revertir a programado y borrar puntos">
+          Revertir
+        </button>
+      }
     }
 
     @if (justSaved()) {

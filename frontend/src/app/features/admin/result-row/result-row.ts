@@ -22,6 +22,7 @@ export class ResultRow {
 
   protected readonly saving = signal(false);
   protected readonly clearing = signal(false);
+  protected readonly confirming = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly justSaved = signal(false);
 
@@ -33,6 +34,15 @@ export class ResultRow {
     this.justSaved.set(false);
   }
 
+  askClear(): void {
+    this.confirming.set(true);
+    this.error.set(null);
+  }
+
+  cancelClear(): void {
+    this.confirming.set(false);
+  }
+
   clear(): void {
     if (this.clearing()) return;
     this.clearing.set(true);
@@ -41,6 +51,7 @@ export class ResultRow {
     this.admin.clearResult(this.match().id).subscribe({
       next: (updated) => {
         this.clearing.set(false);
+        this.confirming.set(false);
         this.resultSaved.emit(updated);
       },
       error: (err) => {

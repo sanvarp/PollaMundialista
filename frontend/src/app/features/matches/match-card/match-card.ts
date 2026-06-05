@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, input, linkedSignal, output, signal } from '@angular/core';
 import { MatchesService } from '../../../core/api/matches.service';
+import { Clock } from '../../../core/clock';
 import { MatchVm, MyPrediction } from '../../../core/models/match.models';
 
 const MAX_GOALS = 30;
@@ -13,9 +14,21 @@ const MAX_GOALS = 30;
 })
 export class MatchCard {
   private readonly matches = inject(MatchesService);
+  private readonly clock = inject(Clock);
 
   readonly match = input.required<MatchVm>();
   readonly predictionSaved = output<{ matchId: number; prediction: MyPrediction }>();
+
+  /** Live "closes in Xd Yh" for open matches; null once locked. */
+  protected readonly countdown = computed(() => {
+    if (this.match().isLocked) return null;
+    const ms = new Date(this.match().kickoffUtc).getTime() - this.clock.now();
+    if (ms <= 0) return null;
+    const d = Math.floor(ms / 86_400_000);
+    const h = Math.floor((ms % 86_400_000) / 3_600_000);
+    const m = Math.floor((ms % 3_600_000) / 60_000);
+    return d > 0 ? `${d}d ${h}h` : h > 0 ? `${h}h ${m}m` : `${m}m`;
+  });
 
   // Editable score, seeded from the existing prediction; resets if the match input changes.
   protected readonly home = linkedSignal(() => this.match().myPrediction?.homeGoals ?? 0);
