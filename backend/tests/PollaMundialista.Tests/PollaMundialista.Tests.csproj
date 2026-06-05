@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
@@ -23,6 +24,7 @@
     <ProjectReference Include="..\..\src\PollaMundialista.Application\PollaMundialista.Application.csproj" />
     <ProjectReference Include="..\..\src\PollaMundialista.Domain\PollaMundialista.Domain.csproj" />
     <ProjectReference Include="..\..\src\PollaMundialista.Infrastructure\PollaMundialista.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\PollaMundialista.Api\PollaMundialista.Api.csproj" />
   </ItemGroup>
 
 </Project>

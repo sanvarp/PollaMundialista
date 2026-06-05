@@ -1,6 +1,7 @@
 using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using PollaMundialista.Api.Common;
 using PollaMundialista.Application;
@@ -17,7 +18,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>("database", tags: ["ready"]);
 
 // ---- Observability (Application Insights) -------------------------------
 // Activates only when APPLICATIONINSIGHTS_CONNECTION_STRING is configured.
@@ -87,12 +89,17 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseSecurityHeaders();
+app.UseCorrelationId();
 app.UseCors(CorsPolicy);
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.MapHealthChecks("/health").AllowAnonymous();
+
+// Liveness: app is up (no dependencies). Readiness: also checks the database.
+app.MapHealthChecks("/health", new HealthCheckOptions { Predicate = _ => false }).AllowAnonymous();
+app.MapHealthChecks("/health/ready", new HealthCheckOptions { Predicate = r => r.Tags.Contains("ready") }).AllowAnonymous();
 
 // ---- Schema + seed at startup ------------------------------------------
 await DbInitializer.InitializeAsync(app.Services);
