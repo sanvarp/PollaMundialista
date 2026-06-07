@@ -28,8 +28,11 @@ export class Leaderboard {
   private readonly api = inject(LeaderboardService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly board = viewChild<ElementRef<HTMLElement>>('board');
+  /** In-flight reorder animation, killed on destroy so tweens don't outlive the view. */
+  private currentFlip?: ReturnType<typeof Flip.from>;
 
   protected readonly entries = signal<LeaderboardEntry[]>([]);
   protected readonly loading = signal(true);
@@ -55,7 +58,10 @@ export class Leaderboard {
 
     // Poll so a result posted by an admin animates in (Flip) without a manual refresh.
     const timer = setInterval(() => this.load(false), POLL_MS);
-    inject(DestroyRef).onDestroy(() => clearInterval(timer));
+    this.destroyRef.onDestroy(() => {
+      clearInterval(timer);
+      this.currentFlip?.kill();
+    });
   }
 
   private load(initial: boolean): void {
@@ -85,7 +91,7 @@ export class Leaderboard {
               // Suppress the slots' CSS transitions so they don't fight Flip's
               // transform reset (otherwise the side podium slots wobble at the end).
               container.classList.add('is-flipping');
-              Flip.from(flipState, {
+              this.currentFlip = Flip.from(flipState, {
                 duration: 0.6,
                 ease: 'power2.out',
                 absolute: true,
@@ -96,10 +102,16 @@ export class Leaderboard {
                   gsap.fromTo(
                     els,
                     { opacity: 0, scale: 0.8 },
-                    { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' },
+                    { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out', overwrite: 'auto' },
                   ),
                 onLeave: (els) =>
-                  gsap.to(els, { opacity: 0, scale: 0.8, duration: 0.4, ease: 'power2.in' }),
+                  gsap.to(els, {
+                    opacity: 0,
+                    scale: 0.8,
+                    duration: 0.4,
+                    ease: 'power2.in',
+                    overwrite: 'auto',
+                  }),
                 onComplete: () => {
                   gsap.set(container, { clearProps: 'height' });
                   requestAnimationFrame(() => container.classList.remove('is-flipping'));
