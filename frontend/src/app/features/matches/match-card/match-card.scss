@@ -159,6 +159,31 @@
   text-align: center;
 }
 
+/* Editable score: looks like the number, but you can type / use arrows */
+.stepper__input {
+  width: 2.2ch;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  appearance: textfield;
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  &:focus {
+    outline: none;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
 .card__footer {
   display: flex;
   align-items: center;

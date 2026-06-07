@@ -7,10 +7,23 @@
     <p class="page__sub">
       Predice el marcador exacto. Aciertas el marcador → <strong>3 pts</strong>,
       aciertas el resultado → <strong>1 pt</strong>.
-      @if (openCount() > 0) {
-        <span class="page__open">{{ openCount() }} abiertos para predecir.</span>
-      }
     </p>
+
+    @if (openCount() > 0) {
+      <div class="predprog" [class.predprog--done]="remainingOpen() === 0">
+        <div class="predprog__track">
+          <div class="predprog__fill" [style.width.%]="progressPct()"></div>
+        </div>
+        @if (remainingOpen() > 0) {
+          <p class="predprog__label">
+            <strong>{{ predictedOpen() }}</strong> de <strong>{{ openCount() }}</strong> predichos ·
+            te faltan <strong class="predprog__left">{{ remainingOpen() }}</strong>
+          </p>
+        } @else {
+          <p class="predprog__label predprog__label--done">✓ Predijiste los {{ openCount() }} partidos abiertos</p>
+        }
+      </div>
+    }
   </header>
 
   @if (loading()) {

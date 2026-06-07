@@ -11,13 +11,33 @@
   <div class="row__entry">
     <div class="stepper">
       <button type="button" (click)="step('home', -1)" aria-label="menos local">−</button>
-      <span class="stepper__val">{{ home() }}</span>
+      <input
+        class="stepper__val stepper__input"
+        type="number"
+        min="0"
+        max="30"
+        inputmode="numeric"
+        [value]="home()"
+        (input)="onType('home', $event)"
+        (focus)="selectOnFocus($event)"
+        aria-label="goles local"
+      />
       <button type="button" (click)="step('home', 1)" aria-label="más local">+</button>
     </div>
     <span class="row__sep">:</span>
     <div class="stepper">
       <button type="button" (click)="step('away', -1)" aria-label="menos visitante">−</button>
-      <span class="stepper__val">{{ away() }}</span>
+      <input
+        class="stepper__val stepper__input"
+        type="number"
+        min="0"
+        max="30"
+        inputmode="numeric"
+        [value]="away()"
+        (input)="onType('away', $event)"
+        (focus)="selectOnFocus($event)"
+        aria-label="goles visitante"
+      />
       <button type="button" (click)="step('away', 1)" aria-label="más visitante">+</button>
     </div>
 

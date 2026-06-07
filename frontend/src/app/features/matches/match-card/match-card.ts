@@ -53,6 +53,19 @@ export class MatchCard {
     this.justSaved.set(false);
   }
 
+  /** Keyboard entry: parse, clamp to 0..MAX, update the signal. */
+  onType(side: 'home' | 'away', event: Event): void {
+    const raw = (event.target as HTMLInputElement).value;
+    const n = raw === '' ? 0 : Number.parseInt(raw, 10);
+    const sig = side === 'home' ? this.home : this.away;
+    sig.set(Number.isNaN(n) ? 0 : Math.max(0, Math.min(MAX_GOALS, n)));
+    this.justSaved.set(false);
+  }
+
+  selectOnFocus(event: FocusEvent): void {
+    (event.target as HTMLInputElement).select();
+  }
+
   save(): void {
     if (this.saving() || !this.editable()) return;
     this.saving.set(true);

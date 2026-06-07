@@ -51,6 +51,16 @@ export class Matches {
 
   protected readonly openCount = computed(() => this.matches().filter((m) => !m.isLocked).length);
 
+  /** Of the open matches, how many the user has already predicted / has left. */
+  protected readonly predictedOpen = computed(
+    () => this.matches().filter((m) => !m.isLocked && m.myPrediction !== null).length,
+  );
+  protected readonly remainingOpen = computed(() => this.openCount() - this.predictedOpen());
+  protected readonly progressPct = computed(() => {
+    const total = this.openCount();
+    return total === 0 ? 0 : Math.round((this.predictedOpen() / total) * 100);
+  });
+
   setView(mode: 'group' | 'date'): void {
     this.view.set(mode);
   }
