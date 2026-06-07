@@ -1,7 +1,9 @@
 import { AfterViewInit, Directive, ElementRef, OnDestroy, inject, input } from '@angular/core';
-import { ScrollTrigger, gsap, reducedMotion, registerGsap } from './motion';
+import { gsap, reducedMotion, registerGsap } from './motion';
 
 /** Fades/slides an element in as it scrolls into view. */
+// Intentional terse attribute API for an app-level motion utility (no prefix).
+// eslint-disable-next-line @angular-eslint/directive-selector
 @Directive({ selector: '[revealOnScroll]' })
 export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);

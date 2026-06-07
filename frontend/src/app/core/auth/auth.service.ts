@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, CurrentUser, LoginRequest, RegisterRequest, Role } from './auth.models';
+import { AuthResponse, CurrentUser, LoginRequest, RegisterRequest } from './auth.models';
 
 const STORAGE_KEY = 'polla.auth';
 

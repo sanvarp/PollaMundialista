@@ -5,6 +5,8 @@ import { SplitText, gsap, reducedMotion, registerGsap } from './motion';
  * Reveals a headline character-by-character with a staggered rise.
  * Waits for web fonts so the split measures the final glyphs.
  */
+// Intentional terse attribute API for an app-level motion utility (no prefix).
+// eslint-disable-next-line @angular-eslint/directive-selector
 @Directive({ selector: '[splitReveal]' })
 export class SplitRevealDirective implements AfterViewInit, OnDestroy {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);

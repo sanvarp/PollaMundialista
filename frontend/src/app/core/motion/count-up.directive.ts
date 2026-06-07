@@ -6,6 +6,8 @@ import { gsap, reducedMotion, registerGsap } from './motion';
  * Use on an element with NO text interpolation — the directive writes textContent.
  *   <span [countUp]="points"></span>
  */
+// Intentional terse attribute API for an app-level motion utility (no prefix).
+// eslint-disable-next-line @angular-eslint/directive-selector
 @Directive({ selector: '[countUp]' })
 export class CountUpDirective {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
