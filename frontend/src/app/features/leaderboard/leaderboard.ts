@@ -63,12 +63,21 @@ export class Leaderboard {
         const changed = JSON.stringify(e.map((x) => x.userId)) !== JSON.stringify(this.entries().map((x) => x.userId));
         this.entries.set(e);
         this.loading.set(false);
-        if (flipState && changed) {
+        if (flipState && changed && container) {
           // Wait for the DOM to reflect the new order, then animate from old positions.
           requestAnimationFrame(() =>
-            requestAnimationFrame(() =>
-              Flip.from(flipState, { duration: 0.7, ease: 'power2.inOut', absolute: true, stagger: 0.04 }),
-            ),
+            requestAnimationFrame(() => {
+              // Pin the wrapper height so it doesn't collapse while rows are absolute.
+              const h = container.getBoundingClientRect().height;
+              gsap.set(container, { height: h });
+              Flip.from(flipState, {
+                duration: 0.6,
+                ease: 'power2.out',
+                absolute: true,
+                stagger: { each: 0.035, from: 'start' },
+                onComplete: () => gsap.set(container, { clearProps: 'height' }),
+              });
+            }),
           );
         }
       },

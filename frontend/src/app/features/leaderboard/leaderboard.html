@@ -26,7 +26,7 @@
       </button>
     }
 
-    <div #board>
+    <div #board class="board-wrap">
       @if (podium().length) {
         <section class="podium" aria-label="Top 3">
           @for (p of podium(); track p.userId) {
@@ -50,35 +50,30 @@
       }
 
       @if (rest().length) {
-        <table class="board">
-          <thead>
-            <tr>
-              <th class="board__rank">#</th>
-              <th>Jugador</th>
-              <th class="board__num">Exactos</th>
-              <th class="board__num">Puntos</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (e of rest(); track e.userId) {
-              <tr
-                [attr.data-flip-id]="e.userId"
-                [class.is-me]="e.userId === myId"
-                tabindex="0"
-                role="button"
-                [attr.aria-label]="'Ver predicciones de ' + e.displayName"
-                (click)="openUser(e.userId)"
-                (keydown.enter)="openUser(e.userId)"
-                (keydown.space)="openUser(e.userId)"
-              >
-                <td class="board__rank">{{ e.position }}</td>
-                <td>{{ e.displayName }}@if (e.userId === myId) { <span class="tag-you">Tú</span> }</td>
-                <td class="board__num">{{ e.exactHits }}</td>
-                <td class="board__num board__pts"><span [countUp]="e.totalPoints"></span></td>
-              </tr>
-            }
-          </tbody>
-        </table>
+        <div class="board" role="table" aria-label="Resto de la tabla">
+          <div class="board__head" role="row">
+            <span class="board__rank" role="columnheader">#</span>
+            <span role="columnheader">Jugador</span>
+            <span class="board__num" role="columnheader">Exactos</span>
+            <span class="board__num" role="columnheader">Puntos</span>
+          </div>
+          @for (e of rest(); track e.userId) {
+            <button
+              type="button"
+              class="board__row"
+              role="row"
+              [attr.data-flip-id]="e.userId"
+              [class.is-me]="e.userId === myId"
+              [attr.aria-label]="'Ver predicciones de ' + e.displayName"
+              (click)="openUser(e.userId)"
+            >
+              <span class="board__rank">{{ e.position }}</span>
+              <span class="board__name">{{ e.displayName }}@if (e.userId === myId) { <span class="tag-you">Tú</span> }</span>
+              <span class="board__num">{{ e.exactHits }}</span>
+              <span class="board__num board__pts"><span [countUp]="e.totalPoints"></span></span>
+            </button>
+          }
+        </div>
       }
     </div>
   }

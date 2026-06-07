@@ -212,51 +212,73 @@
   outline-offset: -1px;
 }
 
-/* Board table */
+/* Board: CSS-grid rows (divs/buttons) so GSAP Flip animates cleanly */
+.board-wrap {
+  position: relative; /* anchors the absolute items during the Flip */
+}
 .board {
-  width: 100%;
-  border-collapse: collapse;
+  display: flex;
+  flex-direction: column;
   font-size: 0.92rem;
 }
-.board th {
+.board__head,
+.board__row {
+  display: grid;
+  grid-template-columns: 3rem 1fr 6rem 6rem;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-bottom: 1px solid var(--border);
   text-align: left;
-  font-weight: 500;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
+}
+.board__head {
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--border);
+
+  span {
+    font-weight: 500;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
 }
-/* numeric headers must right-align to sit above their values */
-.board th.board__num {
-  text-align: right;
-}
-.board td {
+.board__row {
+  width: 100%;
   padding: 0.8rem 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
-.board tbody tr {
+  appearance: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
   cursor: pointer;
   transition: background 0.12s ease;
-}
-.board tbody tr:hover {
-  background: rgba(255, 255, 255, 0.03);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
 }
 .board__rank {
-  width: 3rem;
   font-family: var(--font-mono);
   color: var(--text-secondary);
+}
+.board__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .board__num {
   text-align: right;
   font-family: var(--font-mono);
-  width: 6rem;
-  white-space: nowrap;
 }
 .board__pts {
   font-weight: 700;
   color: var(--text);
+}
+
+@media (max-width: 520px) {
+  .board__head,
+  .board__row {
+    grid-template-columns: 2.2rem 1fr 4rem 4rem;
+  }
 }
 
 .state {
