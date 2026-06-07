@@ -53,13 +53,26 @@ export class MatchCard {
     this.justSaved.set(false);
   }
 
-  /** Keyboard entry: parse, clamp to 0..MAX, update the signal. */
+  /** Keyboard entry: keep only digits, clamp 0..MAX, keep the field in sync. */
   onType(side: 'home' | 'away', event: Event): void {
-    const raw = (event.target as HTMLInputElement).value;
-    const n = raw === '' ? 0 : Number.parseInt(raw, 10);
-    const sig = side === 'home' ? this.home : this.away;
-    sig.set(Number.isNaN(n) ? 0 : Math.max(0, Math.min(MAX_GOALS, n)));
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '');
+    const clamped = digits === '' ? 0 : Math.max(0, Math.min(MAX_GOALS, Number.parseInt(digits, 10)));
+    (side === 'home' ? this.home : this.away).set(clamped);
+    const display = digits === '' ? '' : String(clamped);
+    if (input.value !== display) input.value = display; // strip '-', letters, or > 30
     this.justSaved.set(false);
+  }
+
+  /** Up/down arrows step the score (this is a text input, not number). */
+  onKeydown(side: 'home' | 'away', event: KeyboardEvent): void {
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.step(side, 1);
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.step(side, -1);
+    }
   }
 
   selectOnFocus(event: FocusEvent): void {

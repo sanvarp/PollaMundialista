@@ -35,11 +35,23 @@ export class ResultRow {
   }
 
   onType(side: 'home' | 'away', event: Event): void {
-    const raw = (event.target as HTMLInputElement).value;
-    const n = raw === '' ? 0 : Number.parseInt(raw, 10);
-    const sig = side === 'home' ? this.home : this.away;
-    sig.set(Number.isNaN(n) ? 0 : Math.max(0, Math.min(MAX_GOALS, n)));
+    const input = event.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '');
+    const clamped = digits === '' ? 0 : Math.max(0, Math.min(MAX_GOALS, Number.parseInt(digits, 10)));
+    (side === 'home' ? this.home : this.away).set(clamped);
+    const display = digits === '' ? '' : String(clamped);
+    if (input.value !== display) input.value = display;
     this.justSaved.set(false);
+  }
+
+  onKeydown(side: 'home' | 'away', event: KeyboardEvent): void {
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.step(side, 1);
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.step(side, -1);
+    }
   }
 
   selectOnFocus(event: FocusEvent): void {

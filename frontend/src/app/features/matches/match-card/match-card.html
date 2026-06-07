@@ -33,12 +33,12 @@
             <button type="button" (click)="step('home', -1)" aria-label="menos local">−</button>
             <input
               class="stepper__val stepper__input"
-              type="number"
-              min="0"
-              max="30"
+              type="text"
               inputmode="numeric"
+              maxlength="2"
               [value]="home()"
               (input)="onType('home', $event)"
+              (keydown)="onKeydown('home', $event)"
               (focus)="selectOnFocus($event)"
               aria-label="goles local"
             />
@@ -49,12 +49,12 @@
             <button type="button" (click)="step('away', -1)" aria-label="menos visitante">−</button>
             <input
               class="stepper__val stepper__input"
-              type="number"
-              min="0"
-              max="30"
+              type="text"
               inputmode="numeric"
+              maxlength="2"
               [value]="away()"
               (input)="onType('away', $event)"
+              (keydown)="onKeydown('away', $event)"
               (focus)="selectOnFocus($event)"
               aria-label="goles visitante"
             />
