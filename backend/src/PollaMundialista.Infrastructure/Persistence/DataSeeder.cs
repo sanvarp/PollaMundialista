@@ -1,3 +1,5 @@
+using System.Globalization;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -109,7 +111,7 @@ public static class DataSeeder
                 GroupName = f.Group,
                 HomeTeamId = teams[f.HomeCode],
                 AwayTeamId = teams[f.AwayCode],
-                KickoffUtc = DateTime.Parse(f.KickoffUtc).ToUniversalTime(),
+                KickoffUtc = DateTime.Parse(f.KickoffUtc, CultureInfo.InvariantCulture).ToUniversalTime(),
                 Stage = "Group",
                 HomeGoals = f.HomeGoals,
                 AwayGoals = f.AwayGoals,
@@ -178,6 +180,6 @@ public static class DataSeeder
         await db.SaveChangesAsync();
     }
 
-    private record FixtureSeed(string Group, string HomeCode, string AwayCode, string KickoffUtc, int? HomeGoals, int? AwayGoals);
-    private record DemoUser(string Email, string DisplayName, string Password, string Role);
+    private sealed record FixtureSeed(string Group, string HomeCode, string AwayCode, string KickoffUtc, int? HomeGoals, int? AwayGoals);
+    private sealed record DemoUser(string Email, string DisplayName, string Password, string Role);
 }

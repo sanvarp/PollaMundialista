@@ -387,3 +387,20 @@ dotnet_naming_style.s_camelcase.required_suffix =
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
 
+# --- Analyzer ruleset tuning (intentional project decisions) ---
+
+# Static factory methods on the generic Result<T> are an intentional pattern.
+dotnet_diagnostic.CA1000.severity = none
+
+# EF Core migrations are auto-generated; don't lint their shape.
+[**/Migrations/*.cs]
+dotnet_diagnostic.CA1861.severity = none
+dotnet_diagnostic.CA1814.severity = none
+
+# Test code: xUnit method names use underscores for readability; test data
+# arrays and fixture Dispose don't need the array/finalizer micro-rules.
+[tests/**/*.cs]
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CA1861.severity = none
+dotnet_diagnostic.CA1816.severity = none
+
