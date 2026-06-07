@@ -25,6 +25,7 @@ jobs:
         working-directory: backend
         run: |
           dotnet restore
+          dotnet format --verify-no-changes
           dotnet build --no-restore -c Release
           dotnet test --no-build -c Release
       - uses: actions/setup-node@v4
@@ -36,6 +37,8 @@ jobs:
         working-directory: frontend
         run: |
           npm ci
+          npx prettier --check .
+          npm run lint
           npm run build
 
   deploy-api:
