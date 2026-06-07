@@ -228,6 +228,10 @@
   padding: 0.5rem 0.75rem;
   border-bottom: 1px solid var(--border);
 }
+/* numeric headers must right-align to sit above their values */
+.board th.board__num {
+  text-align: right;
+}
 .board td {
   padding: 0.8rem 0.75rem;
   border-bottom: 1px solid var(--border);
@@ -247,6 +251,8 @@
 .board__num {
   text-align: right;
   font-family: var(--font-mono);
+  width: 6rem;
+  white-space: nowrap;
 }
 .board__pts {
   font-weight: 700;
