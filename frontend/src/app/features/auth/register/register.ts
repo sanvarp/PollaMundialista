@@ -18,6 +18,7 @@ export class Register {
 
   protected readonly loading = signal(false);
   protected readonly error = signal<string | null>(null);
+  protected readonly reveal = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
     displayName: ['', [Validators.required, Validators.maxLength(60)]],

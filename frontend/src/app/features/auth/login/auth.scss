@@ -83,6 +83,45 @@ form {
   font-size: 0.75rem;
 }
 
+/* Password field with reveal ("ojito") */
+.field__control {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    width: 100%;
+    padding-right: 2.9rem;
+  }
+}
+
+.field__eye {
+  position: absolute;
+  right: 0.45rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    color: var(--text);
+  }
+  &:active {
+    color: var(--accent);
+    background: rgba(214, 255, 63, 0.1);
+  }
+}
+
 .auth__alert {
   margin: 0;
   padding: 0.7rem 0.9rem;
