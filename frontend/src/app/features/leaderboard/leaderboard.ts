@@ -82,12 +82,28 @@ export class Leaderboard {
               // Pin the wrapper height so it doesn't collapse while rows are absolute.
               const h = container.getBoundingClientRect().height;
               gsap.set(container, { height: h });
+              // Suppress the slots' CSS transitions so they don't fight Flip's
+              // transform reset (otherwise the side podium slots wobble at the end).
+              container.classList.add('is-flipping');
               Flip.from(flipState, {
                 duration: 0.6,
                 ease: 'power2.out',
                 absolute: true,
                 stagger: { each: 0.035, from: 'start' },
-                onComplete: () => gsap.set(container, { clearProps: 'height' }),
+                // A player crossing the podium/board boundary is a different DOM element
+                // (card vs row), so Flip can't morph it — fade+scale it in/out instead.
+                onEnter: (els) =>
+                  gsap.fromTo(
+                    els,
+                    { opacity: 0, scale: 0.8 },
+                    { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' },
+                  ),
+                onLeave: (els) =>
+                  gsap.to(els, { opacity: 0, scale: 0.8, duration: 0.4, ease: 'power2.in' }),
+                onComplete: () => {
+                  gsap.set(container, { clearProps: 'height' });
+                  requestAnimationFrame(() => container.classList.remove('is-flipping'));
+                },
               });
             }),
           );

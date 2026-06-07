@@ -220,6 +220,12 @@
 .board-wrap {
   position: relative; /* anchors the absolute items during the Flip */
 }
+/* While Flip runs, kill the slots'/rows' CSS transitions so they don't animate
+   Flip's transform reset (which caused the side podium slots to wobble at the end). */
+.board-wrap.is-flipping .podium__slot,
+.board-wrap.is-flipping .board__row {
+  transition: none;
+}
 .board {
   display: flex;
   flex-direction: column;
