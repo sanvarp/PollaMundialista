@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using PollaMundialista.Domain.Entities;
 using PollaMundialista.Infrastructure.Identity;
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
 using PollaMundialista.Infrastructure.Identity;
 
 namespace PollaMundialista.Infrastructure.Persistence;

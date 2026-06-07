@@ -1,7 +1,9 @@
 using FluentValidation;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+
 using PollaMundialista.Api.Common;
 using PollaMundialista.Application.Abstractions;
 using PollaMundialista.Application.Auth;

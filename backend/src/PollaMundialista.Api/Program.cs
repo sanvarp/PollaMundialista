@@ -1,13 +1,16 @@
 using System.Text;
 using System.Threading.RateLimiting;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+
 using PollaMundialista.Api.Common;
 using PollaMundialista.Application;
 using PollaMundialista.Application.Common;
 using PollaMundialista.Infrastructure;
 using PollaMundialista.Infrastructure.Persistence;
+
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

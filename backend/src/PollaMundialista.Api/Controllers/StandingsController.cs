@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using PollaMundialista.Application.Standings;
 
 namespace PollaMundialista.Api.Controllers;

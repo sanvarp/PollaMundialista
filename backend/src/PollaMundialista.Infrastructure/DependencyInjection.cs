@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using PollaMundialista.Application.Abstractions;
 using PollaMundialista.Application.Common;
 using PollaMundialista.Infrastructure.Identity;

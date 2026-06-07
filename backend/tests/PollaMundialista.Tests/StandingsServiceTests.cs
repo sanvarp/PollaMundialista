@@ -1,9 +1,11 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+
 using PollaMundialista.Application.Standings;
 using PollaMundialista.Domain.Entities;
 using PollaMundialista.Domain.Enums;
 using PollaMundialista.Infrastructure.Persistence;
+
 using Xunit;
 
 namespace PollaMundialista.Tests;
@@ -31,7 +33,7 @@ public class StandingsServiceTests : IDisposable
         _db.Teams.AddRange(t1, t2, t3, t4);
         await _db.SaveChangesAsync();
 
-        Match Played(Team h, Team a, int hg, int ag) => new()
+        static Match Played(Team h, Team a, int hg, int ag) => new()
         {
             GroupName = "A",
             HomeTeamId = h.Id,

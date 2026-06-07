@@ -1,4 +1,5 @@
 using PollaMundialista.Domain.Scoring;
+
 using Xunit;
 
 namespace PollaMundialista.Tests;

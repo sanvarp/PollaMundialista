@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+
 using PollaMundialista.Application.Common;
 
 namespace PollaMundialista.Infrastructure.Identity;

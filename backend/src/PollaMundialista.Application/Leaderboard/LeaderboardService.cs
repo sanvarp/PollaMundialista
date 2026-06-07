@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using PollaMundialista.Application.Abstractions;
 using PollaMundialista.Domain.Scoring;
 

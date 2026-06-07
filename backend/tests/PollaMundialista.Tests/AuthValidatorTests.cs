@@ -1,4 +1,5 @@
 using PollaMundialista.Application.Auth;
+
 using Xunit;
 
 namespace PollaMundialista.Tests;

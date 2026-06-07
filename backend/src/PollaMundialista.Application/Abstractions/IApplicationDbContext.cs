@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using PollaMundialista.Application.Common;
 using PollaMundialista.Domain.Entities;
 

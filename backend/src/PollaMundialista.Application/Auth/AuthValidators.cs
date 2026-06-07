@@ -1,4 +1,5 @@
 using FluentValidation;
+
 using PollaMundialista.Application.Common;
 
 namespace PollaMundialista.Application.Auth;
