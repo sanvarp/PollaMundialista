@@ -1,4 +1,5 @@
 using FluentValidation;
+using PollaMundialista.Application.Common;
 
 namespace PollaMundialista.Application.Auth;
 
@@ -8,7 +9,7 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("El correo es obligatorio.")
-            .EmailAddress().WithMessage("El correo no es válido.")
+            .Matches(ValidationPatterns.Email).WithMessage("El correo no es válido.")
             .MaximumLength(256);
 
         RuleFor(x => x.Password)
@@ -28,7 +29,7 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
 {
     public LoginRequestValidator()
     {
-        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.Email).NotEmpty().Matches(ValidationPatterns.Email).WithMessage("El correo no es válido.");
         RuleFor(x => x.Password).NotEmpty();
     }
 }

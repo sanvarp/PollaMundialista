@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { SplitRevealDirective } from '../../../core/motion/split-reveal.directive';
+import { EMAIL_PATTERN } from '../../../core/validators';
 import { ShaderHero } from '../../../shared/ui/shader-hero/shader-hero';
 
 @Component({
@@ -22,7 +23,7 @@ export class Register {
 
   protected readonly form = this.fb.nonNullable.group({
     displayName: ['', [Validators.required, Validators.maxLength(60)]],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
     password: [
       '',
       [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)],

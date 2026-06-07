@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { SplitRevealDirective } from '../../../core/motion/split-reveal.directive';
+import { EMAIL_PATTERN } from '../../../core/validators';
 import { ShaderHero } from '../../../shared/ui/shader-hero/shader-hero';
 
 @Component({
@@ -21,7 +22,7 @@ export class Login {
   protected readonly reveal = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
     password: ['', [Validators.required]],
   });
 
