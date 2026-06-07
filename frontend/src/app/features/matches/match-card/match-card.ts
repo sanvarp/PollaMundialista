@@ -57,7 +57,8 @@ export class MatchCard {
   onType(side: 'home' | 'away', event: Event): void {
     const input = event.target as HTMLInputElement;
     const digits = input.value.replace(/\D/g, '');
-    const clamped = digits === '' ? 0 : Math.max(0, Math.min(MAX_GOALS, Number.parseInt(digits, 10)));
+    const clamped =
+      digits === '' ? 0 : Math.max(0, Math.min(MAX_GOALS, Number.parseInt(digits, 10)));
     (side === 'home' ? this.home : this.away).set(clamped);
     const display = digits === '' ? '' : String(clamped);
     if (input.value !== display) input.value = display; // strip '-', letters, or > 30
@@ -84,16 +85,18 @@ export class MatchCard {
     this.saving.set(true);
     this.error.set(null);
 
-    this.matches.upsertPrediction(this.match().id, { homeGoals: this.home(), awayGoals: this.away() }).subscribe({
-      next: (prediction) => {
-        this.saving.set(false);
-        this.justSaved.set(true);
-        this.predictionSaved.emit({ matchId: this.match().id, prediction });
-      },
-      error: (err) => {
-        this.saving.set(false);
-        this.error.set(err?.error?.detail ?? 'No se pudo guardar la predicción.');
-      },
-    });
+    this.matches
+      .upsertPrediction(this.match().id, { homeGoals: this.home(), awayGoals: this.away() })
+      .subscribe({
+        next: (prediction) => {
+          this.saving.set(false);
+          this.justSaved.set(true);
+          this.predictionSaved.emit({ matchId: this.match().id, prediction });
+        },
+        error: (err) => {
+          this.saving.set(false);
+          this.error.set(err?.error?.detail ?? 'No se pudo guardar la predicción.');
+        },
+      });
   }
 }

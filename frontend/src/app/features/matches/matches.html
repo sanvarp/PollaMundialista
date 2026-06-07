@@ -5,8 +5,8 @@
     <p class="page__eyebrow">Fase de grupos · Mundial 2026</p>
     <h1 class="page__title" splitReveal>Partidos</h1>
     <p class="page__sub">
-      Predice el marcador exacto. Aciertas el marcador → <strong>3 pts</strong>,
-      aciertas el resultado → <strong>1 pt</strong>.
+      Predice el marcador exacto. Aciertas el marcador → <strong>3 pts</strong>, aciertas el
+      resultado → <strong>1 pt</strong>.
     </p>
 
     @if (openCount() > 0) {
@@ -20,7 +20,9 @@
             te faltan <strong class="predprog__left">{{ remainingOpen() }}</strong>
           </p>
         } @else {
-          <p class="predprog__label predprog__label--done">✓ Predijiste los {{ openCount() }} partidos abiertos</p>
+          <p class="predprog__label predprog__label--done">
+            ✓ Predijiste los {{ openCount() }} partidos abiertos
+          </p>
         }
       </div>
     }
@@ -32,8 +34,12 @@
     <p class="state state--error">{{ error() }}</p>
   } @else {
     <div class="seg" role="group" aria-label="Cambiar vista de partidos">
-      <button type="button" [class.is-active]="view() === 'group'" (click)="setView('group')">Por grupo</button>
-      <button type="button" [class.is-active]="view() === 'date'" (click)="setView('date')">Por fecha</button>
+      <button type="button" [class.is-active]="view() === 'group'" (click)="setView('group')">
+        Por grupo
+      </button>
+      <button type="button" [class.is-active]="view() === 'date'" (click)="setView('date')">
+        Por fecha
+      </button>
     </div>
 
     @if (view() === 'group') {
@@ -42,7 +48,11 @@
           <h2 class="group__title">Grupo {{ g.group }}</h2>
           <div class="group__grid">
             @for (m of g.matches; track m.id) {
-              <app-match-card revealOnScroll [match]="m" (predictionSaved)="onPredictionSaved($event)" />
+              <app-match-card
+                revealOnScroll
+                [match]="m"
+                (predictionSaved)="onPredictionSaved($event)"
+              />
             }
           </div>
         </section>
@@ -53,7 +63,11 @@
           <h2 class="group__title group__title--day">{{ d.date | date: 'EEEE d MMM' }}</h2>
           <div class="group__grid">
             @for (m of d.matches; track m.id) {
-              <app-match-card revealOnScroll [match]="m" (predictionSaved)="onPredictionSaved($event)" />
+              <app-match-card
+                revealOnScroll
+                [match]="m"
+                (predictionSaved)="onPredictionSaved($event)"
+              />
             }
           </div>
         </section>

@@ -1,4 +1,12 @@
-import { Component, DestroyRef, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  computed,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { LeaderboardService } from '../../core/api/leaderboard.service';
 import { AuthService } from '../../core/auth/auth.service';
@@ -37,7 +45,9 @@ export class Leaderboard {
   protected readonly rest = computed(() => this.entries().slice(3));
 
   /** The current user's own entry, for the "your position" summary. */
-  protected readonly me = computed(() => this.entries().find((e) => e.userId === this.myId) ?? null);
+  protected readonly me = computed(
+    () => this.entries().find((e) => e.userId === this.myId) ?? null,
+  );
 
   constructor() {
     registerGsap();
@@ -60,7 +70,9 @@ export class Leaderboard {
 
     this.api.getLeaderboard().subscribe({
       next: (e) => {
-        const changed = JSON.stringify(e.map((x) => x.userId)) !== JSON.stringify(this.entries().map((x) => x.userId));
+        const changed =
+          JSON.stringify(e.map((x) => x.userId)) !==
+          JSON.stringify(this.entries().map((x) => x.userId));
         this.entries.set(e);
         this.loading.set(false);
         if (flipState && changed && container) {

@@ -48,7 +48,9 @@
   text-transform: uppercase;
   padding: 0.4rem 0.8rem;
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
 
   &:hover {
     border-color: var(--accent);
@@ -157,7 +159,9 @@
   text-align: center;
   color: var(--text);
   font: inherit;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
     transform: translateY(-3px);

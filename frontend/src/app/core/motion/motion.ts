@@ -14,7 +14,9 @@ export function registerGsap(): void {
 
 /** True when the user asked for reduced motion — animations should degrade. */
 export function reducedMotion(): boolean {
-  return typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return (
+    typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
 }
 
 export { Flip, gsap, ScrollTrigger, SplitText };

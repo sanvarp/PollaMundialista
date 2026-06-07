@@ -29,7 +29,9 @@ export class UserHistoryPage implements OnInit {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set(err?.status === 404 ? 'Usuario no encontrado.' : 'No se pudo cargar el historial.');
+        this.error.set(
+          err?.status === 404 ? 'Usuario no encontrado.' : 'No se pudo cargar el historial.',
+        );
         this.loading.set(false);
       },
     });

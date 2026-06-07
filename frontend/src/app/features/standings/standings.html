@@ -50,7 +50,9 @@
                   <td class="tbl__num tbl__hide">{{ r.lost }}</td>
                   <td class="tbl__num tbl__hide">{{ r.goalsFor }}</td>
                   <td class="tbl__num tbl__hide">{{ r.goalsAgainst }}</td>
-                  <td class="tbl__num">{{ r.goalDifference > 0 ? '+' : '' }}{{ r.goalDifference }}</td>
+                  <td class="tbl__num">
+                    {{ r.goalDifference > 0 ? '+' : '' }}{{ r.goalDifference }}
+                  </td>
                   <td class="tbl__num tbl__pts">{{ r.points }}</td>
                 </tr>
               }

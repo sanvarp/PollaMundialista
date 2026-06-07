@@ -37,7 +37,8 @@ export class ResultRow {
   onType(side: 'home' | 'away', event: Event): void {
     const input = event.target as HTMLInputElement;
     const digits = input.value.replace(/\D/g, '');
-    const clamped = digits === '' ? 0 : Math.max(0, Math.min(MAX_GOALS, Number.parseInt(digits, 10)));
+    const clamped =
+      digits === '' ? 0 : Math.max(0, Math.min(MAX_GOALS, Number.parseInt(digits, 10)));
     (side === 'home' ? this.home : this.away).set(clamped);
     const display = digits === '' ? '' : String(clamped);
     if (input.value !== display) input.value = display;
@@ -90,16 +91,18 @@ export class ResultRow {
     this.saving.set(true);
     this.error.set(null);
 
-    this.admin.setResult(this.match().id, { homeGoals: this.home(), awayGoals: this.away() }).subscribe({
-      next: (updated) => {
-        this.saving.set(false);
-        this.justSaved.set(true);
-        this.resultSaved.emit(updated);
-      },
-      error: (err) => {
-        this.saving.set(false);
-        this.error.set(err?.error?.detail ?? 'No se pudo guardar el resultado.');
-      },
-    });
+    this.admin
+      .setResult(this.match().id, { homeGoals: this.home(), awayGoals: this.away() })
+      .subscribe({
+        next: (updated) => {
+          this.saving.set(false);
+          this.justSaved.set(true);
+          this.resultSaved.emit(updated);
+        },
+        error: (err) => {
+          this.saving.set(false);
+          this.error.set(err?.error?.detail ?? 'No se pudo guardar el resultado.');
+        },
+      });
   }
 }

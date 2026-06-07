@@ -26,7 +26,11 @@ export class Register {
     email: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
     password: [
       '',
-      [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/)],
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/),
+      ],
     ],
   });
 

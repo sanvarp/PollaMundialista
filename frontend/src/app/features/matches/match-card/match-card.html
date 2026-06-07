@@ -1,4 +1,8 @@
-<article class="card" [class.card--locked]="locked() && !hasResult()" [class.card--played]="hasResult()">
+<article
+  class="card"
+  [class.card--locked]="locked() && !hasResult()"
+  [class.card--played]="hasResult()"
+>
   <div class="card__top">
     <span class="card__group">Grupo {{ match().group }}</span>
     @if (hasResult()) {
@@ -6,7 +10,9 @@
     } @else if (locked()) {
       <span class="badge badge--locked">Cerrado</span>
     } @else {
-      <span class="badge badge--open">{{ countdown() ? 'Cierra en ' + countdown() : 'Abierto' }}</span>
+      <span class="badge badge--open">{{
+        countdown() ? 'Cierra en ' + countdown() : 'Abierto'
+      }}</span>
     }
     <time class="card__time">{{ match().kickoffUtc | date: 'EEE d MMM · HH:mm' }}</time>
   </div>
@@ -82,8 +88,14 @@
   <div class="card__footer">
     @if (hasResult()) {
       @if (match().myPrediction) {
-        <span class="mypred">Tu: {{ match().myPrediction!.homeGoals }}–{{ match().myPrediction!.awayGoals }}</span>
-        <span class="points" [class.points--3]="match().myPrediction!.pointsAwarded === 3" [class.points--1]="match().myPrediction!.pointsAwarded === 1">
+        <span class="mypred"
+          >Tu: {{ match().myPrediction!.homeGoals }}–{{ match().myPrediction!.awayGoals }}</span
+        >
+        <span
+          class="points"
+          [class.points--3]="match().myPrediction!.pointsAwarded === 3"
+          [class.points--1]="match().myPrediction!.pointsAwarded === 1"
+        >
           +{{ match().myPrediction!.pointsAwarded ?? 0 }} pts
         </span>
       } @else {

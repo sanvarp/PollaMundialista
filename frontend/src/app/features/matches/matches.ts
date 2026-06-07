@@ -29,7 +29,9 @@ export class Matches {
     for (const m of this.matches()) {
       (byGroup.get(m.group) ?? byGroup.set(m.group, []).get(m.group)!).push(m);
     }
-    return [...byGroup.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([group, matches]) => ({ group, matches }));
+    return [...byGroup.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([group, matches]) => ({ group, matches }));
   });
 
   /** Matches grouped by calendar day (local), in kickoff order. */

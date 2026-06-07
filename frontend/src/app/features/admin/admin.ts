@@ -17,8 +17,12 @@ export class Admin {
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
 
-  protected readonly pendingCount = computed(() => this.matches().filter((m) => m.status !== 'Finished').length);
-  protected readonly finishedCount = computed(() => this.matches().filter((m) => m.status === 'Finished').length);
+  protected readonly pendingCount = computed(
+    () => this.matches().filter((m) => m.status !== 'Finished').length,
+  );
+  protected readonly finishedCount = computed(
+    () => this.matches().filter((m) => m.status === 'Finished').length,
+  );
 
   constructor() {
     this.load();
@@ -39,6 +43,8 @@ export class Admin {
   }
 
   onResultSaved(updated: MatchVm): void {
-    this.matches.update((list) => list.map((m) => (m.id === updated.id ? { ...m, ...updated } : m)));
+    this.matches.update((list) =>
+      list.map((m) => (m.id === updated.id ? { ...m, ...updated } : m)),
+    );
   }
 }

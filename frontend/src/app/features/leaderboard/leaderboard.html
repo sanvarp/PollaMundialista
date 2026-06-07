@@ -40,7 +40,12 @@
               [class.is-me]="p.userId === myId"
               (click)="openUser(p.userId)"
             >
-              <span class="podium__pos">{{ p.position }}@if (p.userId === myId) { <span class="tag-you">Tú</span> }</span>
+              <span class="podium__pos"
+                >{{ p.position }}
+                @if (p.userId === myId) {
+                  <span class="tag-you">Tú</span>
+                }
+              </span>
               <span class="podium__name">{{ p.displayName }}</span>
               <span class="podium__pts" [countUp]="p.totalPoints"></span>
               <span class="podium__lbl">pts · {{ p.exactHits }} exactos</span>
@@ -68,7 +73,12 @@
               (click)="openUser(e.userId)"
             >
               <span class="board__rank">{{ e.position }}</span>
-              <span class="board__name">{{ e.displayName }}@if (e.userId === myId) { <span class="tag-you">Tú</span> }</span>
+              <span class="board__name"
+                >{{ e.displayName }}
+                @if (e.userId === myId) {
+                  <span class="tag-you">Tú</span>
+                }
+              </span>
               <span class="board__num">{{ e.exactHits }}</span>
               <span class="board__num board__pts"><span [countUp]="e.totalPoints"></span></span>
             </button>

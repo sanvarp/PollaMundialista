@@ -14,13 +14,16 @@
     @if (played()) {
       <span class="hrow__result">
         <span class="hrow__lbl">Resultado</span>
-        <span class="hrow__val hrow__val--result">{{ entry().result!.homeGoals }}–{{ entry().result!.awayGoals }}</span>
+        <span class="hrow__val hrow__val--result"
+          >{{ entry().result!.homeGoals }}–{{ entry().result!.awayGoals }}</span
+        >
       </span>
       <span
         class="hrow__pts"
         [class.hrow__pts--3]="entry().pointsAwarded === 3"
         [class.hrow__pts--1]="entry().pointsAwarded === 1"
-      >+{{ entry().pointsAwarded ?? 0 }}</span>
+        >+{{ entry().pointsAwarded ?? 0 }}</span
+      >
     } @else {
       <span class="hrow__pending">Pendiente</span>
     }

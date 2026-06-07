@@ -78,7 +78,12 @@ export class ShaderHero implements AfterViewInit, OnDestroy {
   private init(): void {
     const canvas = this.canvas().nativeElement;
     try {
-      this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'low-power' });
+      this.renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: false,
+        alpha: false,
+        powerPreference: 'low-power',
+      });
     } catch {
       this.staticFallback = true;
       return;

@@ -5,7 +5,9 @@
   </a>
 
   <nav class="hdr__nav">
-    <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">Partidos</a>
+    <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }"
+      >Partidos</a
+    >
     <a routerLink="/standings" routerLinkActive="is-active">Grupos</a>
     <a routerLink="/leaderboard" routerLinkActive="is-active">Tabla</a>
     @if (auth.isAdmin()) {

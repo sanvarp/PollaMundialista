@@ -5,10 +5,12 @@
     <p class="page__eyebrow">Panel de administración</p>
     <h1 class="page__title">Resultados</h1>
     <p class="page__sub">
-      Carga el marcador final de cada partido. Al guardar, se recalculan los puntos de
-      todas las predicciones y se actualiza la tabla.
+      Carga el marcador final de cada partido. Al guardar, se recalculan los puntos de todas las
+      predicciones y se actualiza la tabla.
       @if (!loading()) {
-        <span class="page__counts">{{ finishedCount() }} cargados · {{ pendingCount() }} pendientes</span>
+        <span class="page__counts"
+          >{{ finishedCount() }} cargados · {{ pendingCount() }} pendientes</span
+        >
       }
     </p>
   </header>
