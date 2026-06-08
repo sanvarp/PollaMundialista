@@ -16,8 +16,8 @@ export interface UserHistoryEntry {
   kickoffUtc: string;
   status: 'Scheduled' | 'Finished';
   result: MatchResult | null;
-  predHomeGoals: number;
-  predAwayGoals: number;
+  predHomeGoals: number | null;
+  predAwayGoals: number | null;
   pointsAwarded: number | null;
 }
 

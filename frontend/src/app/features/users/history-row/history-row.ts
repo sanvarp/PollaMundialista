@@ -12,4 +12,5 @@ export class HistoryRow {
   readonly entry = input.required<UserHistoryEntry>();
 
   protected readonly played = computed(() => this.entry().result !== null);
+  protected readonly predicted = computed(() => this.entry().predHomeGoals !== null);
 }

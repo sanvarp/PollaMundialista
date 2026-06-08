@@ -12,6 +12,10 @@
 .hrow--played {
   border-color: rgba(214, 255, 63, 0.2);
 }
+/* Matches the user didn't predict: de-emphasized so the predicted ones stand out. */
+.hrow--nopred {
+  opacity: 0.62;
+}
 
 .hrow__match {
   display: flex;
@@ -61,6 +65,11 @@
 .hrow__val--result {
   color: var(--accent);
 }
+.hrow__nopred {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-secondary);
+}
 
 .hrow__pts {
   font-family: var(--font-mono);
@@ -81,6 +90,10 @@
   color: #0a0b0e;
   background: var(--accent);
   border-color: var(--accent);
+}
+.hrow__pts--zero {
+  opacity: 0.55;
+  border-style: dashed;
 }
 
 .hrow__pending {

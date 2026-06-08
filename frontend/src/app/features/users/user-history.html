@@ -15,7 +15,7 @@
       </div>
       @if (!h.isOwnerView) {
         <p class="uhead__note">
-          🔒 Por juego limpio, solo se muestran las predicciones de partidos que ya iniciaron.
+          🔒 Por juego limpio, las predicciones de partidos que aún no inician se mantienen ocultas.
         </p>
       }
     </header>
@@ -27,7 +27,7 @@
         }
       </div>
     } @else {
-      <p class="state">Aún no hay predicciones visibles.</p>
+      <p class="state">Aún no hay partidos cargados.</p>
     }
   }
 </main>

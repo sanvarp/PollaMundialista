@@ -1,4 +1,4 @@
-<div class="hrow" [class.hrow--played]="played()">
+<div class="hrow" [class.hrow--played]="played()" [class.hrow--nopred]="!predicted()">
   <div class="hrow__match">
     <span class="hrow__group">{{ entry().group }}</span>
     <span class="hrow__teams">{{ entry().homeTeam.code }} vs {{ entry().awayTeam.code }}</span>
@@ -6,10 +6,14 @@
   </div>
 
   <div class="hrow__scores">
-    <span class="hrow__pred">
-      <span class="hrow__lbl">Predijo</span>
-      <span class="hrow__val">{{ entry().predHomeGoals }}–{{ entry().predAwayGoals }}</span>
-    </span>
+    @if (predicted()) {
+      <span class="hrow__pred">
+        <span class="hrow__lbl">Predijo</span>
+        <span class="hrow__val">{{ entry().predHomeGoals }}–{{ entry().predAwayGoals }}</span>
+      </span>
+    } @else if (played()) {
+      <span class="hrow__nopred">No predijo</span>
+    }
 
     @if (played()) {
       <span class="hrow__result">
@@ -18,12 +22,16 @@
           >{{ entry().result!.homeGoals }}–{{ entry().result!.awayGoals }}</span
         >
       </span>
-      <span
-        class="hrow__pts"
-        [class.hrow__pts--3]="entry().pointsAwarded === 3"
-        [class.hrow__pts--1]="entry().pointsAwarded === 1"
-        >+{{ entry().pointsAwarded ?? 0 }}</span
-      >
+      @if (predicted()) {
+        <span
+          class="hrow__pts"
+          [class.hrow__pts--3]="entry().pointsAwarded === 3"
+          [class.hrow__pts--1]="entry().pointsAwarded === 1"
+          >+{{ entry().pointsAwarded ?? 0 }}</span
+        >
+      } @else {
+        <span class="hrow__pts hrow__pts--zero">+0</span>
+      }
     } @else {
       <span class="hrow__pending">Pendiente</span>
     }
