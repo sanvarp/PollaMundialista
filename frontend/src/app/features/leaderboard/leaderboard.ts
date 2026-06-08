@@ -73,6 +73,14 @@ export class Leaderboard {
       !initial && !reducedMotion() && container
         ? Flip.getState(container.querySelectorAll('[data-flip-id]'))
         : null;
+    // IDs present BEFORE the change, so we can detect boundary-crossers ourselves —
+    // Flip's own enter/leave detection is unreliable across our two containers.
+    const oldIds = new Set<string>();
+    if (flipState && container) {
+      container
+        .querySelectorAll<HTMLElement>('[data-flip-id]')
+        .forEach((el) => oldIds.add(el.dataset['flipId'] ?? ''));
+    }
 
     this.api.getLeaderboard().subscribe({
       next: (e) => {
@@ -85,6 +93,10 @@ export class Leaderboard {
           // Wait for the DOM to reflect the new order, then animate from old positions.
           requestAnimationFrame(() =>
             requestAnimationFrame(() => {
+              // Boundary-crossers we detect ourselves: elements present now but not before.
+              const entering = [
+                ...container.querySelectorAll<HTMLElement>('[data-flip-id]'),
+              ].filter((el) => !oldIds.has(el.dataset['flipId'] ?? ''));
               // Pin the wrapper height so it doesn't collapse while rows are absolute.
               const h = container.getBoundingClientRect().height;
               gsap.set(container, { height: h });
@@ -96,19 +108,12 @@ export class Leaderboard {
                 ease: 'power2.out',
                 absolute: true,
                 stagger: { each: 0.035, from: 'start' },
-                // A player crossing the podium/board boundary is a different DOM element
-                // (card vs row), so Flip can't morph it — fade+scale it in/out instead.
-                onEnter: (els) =>
-                  gsap.fromTo(
-                    els,
-                    { opacity: 0, scale: 0.8 },
-                    { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out', overwrite: 'auto' },
-                  ),
+                // The card/row a crosser leaves behind cleanly disappears.
                 onLeave: (els) =>
                   gsap.to(els, {
                     opacity: 0,
-                    scale: 0.8,
-                    duration: 0.4,
+                    scale: 0.78,
+                    duration: 0.28,
                     ease: 'power2.in',
                     overwrite: 'auto',
                   }),
@@ -117,6 +122,23 @@ export class Leaderboard {
                   requestAnimationFrame(() => container.classList.remove('is-flipping'));
                 },
               });
+              // ...then a crosser BUILDS into its new slot, delayed so it follows the exit
+              // and the reflow: old disappears -> survivors slide -> new card/row grows in.
+              if (entering.length) {
+                gsap.fromTo(
+                  entering,
+                  { opacity: 0, scale: 0.8 },
+                  {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.5,
+                    delay: 0.3,
+                    ease: 'back.out(1.5)',
+                    overwrite: 'auto',
+                    stagger: 0.06,
+                  },
+                );
+              }
             }),
           );
         }

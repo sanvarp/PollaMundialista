@@ -33,7 +33,7 @@
             <button
               type="button"
               class="podium__slot"
-              [attr.data-flip-id]="p.userId"
+              [attr.data-flip-id]="'p-' + p.userId"
               [class.podium__slot--1]="p.position === 1"
               [class.podium__slot--2]="p.position === 2"
               [class.podium__slot--3]="p.position === 3"
@@ -67,7 +67,7 @@
               type="button"
               class="board__row"
               role="row"
-              [attr.data-flip-id]="e.userId"
+              [attr.data-flip-id]="'b-' + e.userId"
               [class.is-me]="e.userId === myId"
               [attr.aria-label]="'Ver predicciones de ' + e.displayName"
               (click)="openUser(e.userId)"
