@@ -36,8 +36,20 @@ export class Login {
 
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => {
-        const returnUrl = new URLSearchParams(location.search).get('returnUrl') || '/';
-        this.router.navigateByUrl(returnUrl);
+        this.loading.set(false);
+        const raw = new URLSearchParams(location.search).get('returnUrl') ?? '';
+        const path = raw.split(/[?#]/)[0];
+        // Only follow a safe internal path. A returnUrl whose path is an auth page (e.g.
+        // nested from repeated guard redirects) would re-enter this component and freeze the
+        // button on "Entrando…"; an external/protocol-relative/backslash one would be an open
+        // redirect. Fall back to home in those cases.
+        const safe =
+          raw.startsWith('/') &&
+          !raw.startsWith('//') &&
+          !raw.includes('\\') &&
+          path !== '/login' &&
+          path !== '/register';
+        this.router.navigateByUrl(safe ? raw : '/');
       },
       error: (err) => {
         this.error.set(err?.error?.detail ?? 'No fue posible iniciar sesión. Verifica tus datos.');
