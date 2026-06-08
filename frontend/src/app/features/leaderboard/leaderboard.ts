@@ -2,6 +2,8 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  Injector,
+  afterNextRender,
   computed,
   inject,
   signal,
@@ -29,12 +31,15 @@ export class Leaderboard {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
 
   private readonly board = viewChild<ElementRef<HTMLElement>>('board');
   /** In-flight reorder animation + its companion tweens, cleaned up on overlap/destroy. */
   private currentFlip?: ReturnType<typeof Flip.from>;
   private enterTween?: gsap.core.Tween;
   private ghostTween?: gsap.core.Tween;
+  /** Pending post-render hook that mounts the next Flip; cancelled if a new load supersedes it. */
+  private pendingRender?: ReturnType<typeof afterNextRender>;
 
   protected readonly entries = signal<LeaderboardEntry[]>([]);
   protected readonly loading = signal(true);
@@ -73,6 +78,10 @@ export class Leaderboard {
    * run its own style-reversion before we kill it; the rest is belt-and-suspenders.
    */
   private resetAnimation(): void {
+    // Cancel a post-render hook that hasn't fired yet (a superseding load), so two reorders
+    // can't both mount a Flip in the same tick.
+    this.pendingRender?.destroy();
+    this.pendingRender = undefined;
     this.currentFlip?.progress(1).kill();
     this.enterTween?.kill();
     this.ghostTween?.kill();
@@ -148,9 +157,12 @@ export class Leaderboard {
         this.entries.set(e);
         this.loading.set(false);
         if (flipState && changed && container) {
-          // Wait for the DOM to reflect the new order, then animate from old positions.
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() => {
+          // Run after Angular renders the new order but BEFORE the browser paints it, so a
+          // rising row is never shown at its destination for one frame before Flip animates it
+          // from its old position (that flash was the "blink into place" before the swap).
+          this.pendingRender = afterNextRender(
+            () => {
+              this.pendingRender = undefined;
               // Boundary-crossers we detect ourselves: elements present now but not before.
               const entering = [
                 ...container.querySelectorAll<HTMLElement>('[data-flip-id]'),
@@ -216,7 +228,8 @@ export class Leaderboard {
                   },
                 );
               }
-            }),
+            },
+            { injector: this.injector },
           );
         }
       },
