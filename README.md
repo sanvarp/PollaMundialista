@@ -65,7 +65,7 @@ Diagramas y decisiones en [`/docs/architecture.md`](docs/architecture.md) · ERD
     PollaMundialista.Domain           Entities, enums, reglas de dominio puras
     PollaMundialista.Infrastructure   EF Core, migrations, Identity, seeder
   /tests
-    PollaMundialista.Tests            xUnit (17 pruebas)
+    PollaMundialista.Tests            xUnit (35 pruebas)
   Dockerfile                          imagen multistage de la API
 /frontend           app Angular 21
 /infra              notas de infraestructura
@@ -104,7 +104,7 @@ CORS ya permite `http://localhost:4200`.
 ### Pruebas
 
 ```bash
-cd backend && dotnet test      # 17 pruebas (scoring 3/1/0, bloqueo por kickoff, recálculo)
+cd backend && dotnet test      # 35 pruebas (unit + integración: scoring 3/1/0, bloqueo por kickoff, recálculo, validación, flujo E2E con WebApplicationFactory)
 ```
 
 ---
@@ -137,7 +137,7 @@ Todo está **desplegado y automatizado**:
 
 **Pipeline** ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) — en cada push a `main`:
 
-1. **`test`** (gate): `dotnet test` (17 pruebas) + `ng build`. Si falla, no se despliega.
+1. **`test`** (gate): `dotnet test` (35 pruebas) + `ng build`. Si falla, no se despliega.
 2. **`deploy-api`**: `az acr build` (construye la imagen en la nube) → `az containerapp update`.
 3. **`deploy-frontend`**: `ng build` → Azure Static Web Apps.
 
