@@ -31,8 +31,10 @@ export class Leaderboard {
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly board = viewChild<ElementRef<HTMLElement>>('board');
-  /** In-flight reorder animation, killed on destroy so tweens don't outlive the view. */
+  /** In-flight reorder animation + its companion tweens, cleaned up on overlap/destroy. */
   private currentFlip?: ReturnType<typeof Flip.from>;
+  private enterTween?: gsap.core.Tween;
+  private ghostTween?: gsap.core.Tween;
 
   protected readonly entries = signal<LeaderboardEntry[]>([]);
   protected readonly loading = signal(true);
@@ -60,8 +62,33 @@ export class Leaderboard {
     const timer = setInterval(() => this.load(false), POLL_MS);
     this.destroyRef.onDestroy(() => {
       clearInterval(timer);
-      this.currentFlip?.kill();
+      this.resetAnimation();
     });
+  }
+
+  /**
+   * Abort and fully clean up any in-flight reorder animation. Called before each new
+   * animation (so an overlapping refresh/poll/admin-result can't leave rows stuck in
+   * position:absolute or capture a dirty state) and on destroy. `progress(1)` makes Flip
+   * run its own style-reversion before we kill it; the rest is belt-and-suspenders.
+   */
+  private resetAnimation(): void {
+    this.currentFlip?.progress(1).kill();
+    this.enterTween?.kill();
+    this.ghostTween?.kill();
+    this.currentFlip = undefined;
+    this.enterTween = undefined;
+    this.ghostTween = undefined;
+    document.querySelectorAll('.lb-ghost').forEach((g) => g.remove());
+    const container = this.board()?.nativeElement;
+    if (!container) return;
+    container.classList.remove('is-flipping');
+    const items = container.querySelectorAll('[data-flip-id]');
+    gsap.killTweensOf(items);
+    gsap.set(items, { clearProps: 'position,top,left,width,height,margin,transform,opacity' });
+    container
+      .querySelectorAll('.podium, .board')
+      .forEach((el) => gsap.set(el, { clearProps: 'height' }));
   }
 
   private load(initial: boolean): void {
@@ -69,6 +96,9 @@ export class Leaderboard {
 
     // Capture positions before the data changes, to animate the reorder.
     const container = this.board()?.nativeElement;
+    // Abort any animation still running (overlapping refresh/poll/admin result) so we
+    // capture a clean state and never leave survivors pinned absolute.
+    if (!initial && container) this.resetAnimation();
     const flipState =
       !initial && !reducedMotion() && container
         ? Flip.getState(container.querySelectorAll('[data-flip-id]'))
@@ -87,6 +117,34 @@ export class Leaderboard {
         const changed =
           JSON.stringify(e.map((x) => x.userId)) !==
           JSON.stringify(this.entries().map((x) => x.userId));
+
+        // Clone the elements about to LEAVE (a player crossing the podium/board boundary)
+        // BEFORE Angular removes them, so we animate their disappearance ourselves. They go
+        // on document.body (position:fixed) so Angular's change detection can't wipe them.
+        const ghosts: HTMLElement[] = [];
+        if (flipState && changed && container) {
+          const newIds = new Set(e.map((x, i) => (i < 3 ? 'p-' : 'b-') + x.userId));
+          container.querySelectorAll<HTMLElement>('[data-flip-id]').forEach((el) => {
+            if (newIds.has(el.dataset['flipId'] ?? '')) return;
+            const r = el.getBoundingClientRect();
+            const g = el.cloneNode(true) as HTMLElement;
+            g.removeAttribute('data-flip-id');
+            g.classList.add('lb-ghost');
+            Object.assign(g.style, {
+              position: 'fixed',
+              margin: '0',
+              pointerEvents: 'none',
+              zIndex: '40',
+              top: `${r.top}px`,
+              left: `${r.left}px`,
+              width: `${r.width}px`,
+              height: `${r.height}px`,
+            });
+            document.body.appendChild(g);
+            ghosts.push(g);
+          });
+        }
+
         this.entries.set(e);
         this.loading.set(false);
         if (flipState && changed && container) {
@@ -97,45 +155,64 @@ export class Leaderboard {
               const entering = [
                 ...container.querySelectorAll<HTMLElement>('[data-flip-id]'),
               ].filter((el) => !oldIds.has(el.dataset['flipId'] ?? ''));
-              // Pin the wrapper height so it doesn't collapse while rows are absolute.
-              const h = container.getBoundingClientRect().height;
-              gsap.set(container, { height: h });
-              // Suppress the slots' CSS transitions so they don't fight Flip's
-              // transform reset (otherwise the side podium slots wobble at the end).
+              // Capture each enterer's CORRECT final rect now, while everything is still in
+              // flow. Once Flip makes the survivors absolute, an entering element would be
+              // alone in its container and get mis-placed — so we pin it here instead.
+              const cr = container.getBoundingClientRect();
+              const enterRects = entering.map((el) => {
+                const r = el.getBoundingClientRect();
+                return { el, top: r.top - cr.top, left: r.left - cr.left, w: r.width, h: r.height };
+              });
+              // Pin the inner containers' heights so neither collapses while its items are
+              // absolute — otherwise the board header jumps up into the podium's vacated space.
+              const inner = [
+                container.querySelector<HTMLElement>('.podium'),
+                container.querySelector<HTMLElement>('.board'),
+              ].filter((el): el is HTMLElement => el != null);
+              inner.forEach((el) => gsap.set(el, { height: el.getBoundingClientRect().height }));
+              // Suppress the slots' CSS transitions so they don't fight Flip's transform reset.
               container.classList.add('is-flipping');
+              // Survivors glide to their new spots.
               this.currentFlip = Flip.from(flipState, {
                 duration: 0.6,
                 ease: 'power2.out',
                 absolute: true,
                 stagger: { each: 0.035, from: 'start' },
-                // The card/row a crosser leaves behind cleanly disappears.
-                onLeave: (els) =>
-                  gsap.to(els, {
-                    opacity: 0,
-                    scale: 0.78,
-                    duration: 0.28,
-                    ease: 'power2.in',
-                    overwrite: 'auto',
-                  }),
                 onComplete: () => {
-                  gsap.set(container, { clearProps: 'height' });
+                  inner.forEach((el) => gsap.set(el, { clearProps: 'height' }));
+                  enterRects.forEach(({ el }) =>
+                    gsap.set(el, { clearProps: 'position,top,left,width,height,margin' }),
+                  );
                   requestAnimationFrame(() => container.classList.remove('is-flipping'));
                 },
               });
-              // ...then a crosser BUILDS into its new slot, delayed so it follows the exit
-              // and the reflow: old disappears -> survivors slide -> new card/row grows in.
+              // The card/row a crosser left behind cleanly disappears (its clone)...
+              if (ghosts.length) {
+                this.ghostTween = gsap.to(ghosts, {
+                  opacity: 0,
+                  scale: 0.85,
+                  duration: 0.35,
+                  ease: 'power2.in',
+                  overwrite: 'auto',
+                  onComplete: () => ghosts.forEach((g) => g.remove()),
+                });
+              }
+              // ...while the new card/row — pinned at its correct spot so the absolute
+              // survivors can't mis-place it — builds in (no delay -> no empty gap).
+              enterRects.forEach(({ el, top, left, w, h }) =>
+                gsap.set(el, { position: 'absolute', top, left, width: w, height: h, margin: 0 }),
+              );
               if (entering.length) {
-                gsap.fromTo(
+                this.enterTween = gsap.fromTo(
                   entering,
-                  { opacity: 0, scale: 0.8 },
+                  { opacity: 0, scale: 0.85 },
                   {
                     opacity: 1,
                     scale: 1,
                     duration: 0.5,
-                    delay: 0.3,
-                    ease: 'back.out(1.5)',
+                    ease: 'back.out(1.4)',
                     overwrite: 'auto',
-                    stagger: 0.06,
+                    stagger: 0.05,
                   },
                 );
               }
