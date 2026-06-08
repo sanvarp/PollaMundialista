@@ -12,36 +12,39 @@ using PollaMundialista.Infrastructure.Identity;
 namespace PollaMundialista.Infrastructure.Persistence;
 
 /// <summary>
-/// Idempotent seeding of teams, the 12 group-stage matches, demo users and
-/// sample predictions. Demo realism: matchday 1 of each group is pre-loaded as
-/// played so the leaderboard is populated; the rest stay open for live prediction.
+/// Idempotent seeding of teams, the 12 group-stage matches, demo users and sample
+/// predictions. Uses the REAL Group A and Group B of the 2026 FIFA World Cup (teams,
+/// fixtures and kickoff dates/times in UTC). Demo device: matchday 1 of each group is
+/// pre-loaded as played (illustrative scores) so the leaderboard is populated; the
+/// rest stay open for live prediction.
 /// </summary>
 public static class DataSeeder
 {
-    // --- Teams (real national teams; group draw is illustrative for the demo) ---
+    // --- Real Group A and Group B of the 2026 FIFA World Cup ---
     private static readonly (string Code, string Name, string Group)[] TeamData =
     [
-        ("MEX", "México", "A"), ("CRO", "Croacia", "A"), ("JPN", "Japón", "A"), ("GHA", "Ghana", "A"),
-        ("ARG", "Argentina", "B"), ("ESP", "España", "B"), ("MAR", "Marruecos", "B"), ("KOR", "Corea del Sur", "B"),
+        ("MEX", "México", "A"), ("RSA", "Sudáfrica", "A"), ("KOR", "Corea del Sur", "A"), ("CZE", "República Checa", "A"),
+        ("CAN", "Canadá", "B"), ("BIH", "Bosnia y Herzegovina", "B"), ("QAT", "Catar", "B"), ("SUI", "Suiza", "B"),
     ];
 
-    // Round-robin fixtures. Goals != null => pre-loaded as Finished for the demo.
+    // Real fixtures (kickoff in UTC). Goals != null => matchday 1, pre-loaded as Finished
+    // with illustrative scores so the leaderboard is populated; matchdays 2 and 3 stay open.
     private static readonly FixtureSeed[] Fixtures =
     [
         // Group A
-        new("A", "MEX", "CRO", "2026-06-11T20:00:00Z", 2, 1),
-        new("A", "JPN", "GHA", "2026-06-12T18:00:00Z", 0, 0),
-        new("A", "MEX", "JPN", "2026-06-16T21:00:00Z", null, null),
-        new("A", "CRO", "GHA", "2026-06-17T18:00:00Z", null, null),
-        new("A", "MEX", "GHA", "2026-06-21T20:00:00Z", null, null),
-        new("A", "CRO", "JPN", "2026-06-21T23:00:00Z", null, null),
+        new("A", "MEX", "RSA", "2026-06-11T19:00:00Z", 2, 0),
+        new("A", "KOR", "CZE", "2026-06-12T02:00:00Z", 1, 1),
+        new("A", "CZE", "RSA", "2026-06-18T16:00:00Z", null, null),
+        new("A", "MEX", "KOR", "2026-06-19T01:00:00Z", null, null),
+        new("A", "CZE", "MEX", "2026-06-25T01:00:00Z", null, null),
+        new("A", "RSA", "KOR", "2026-06-25T01:00:00Z", null, null),
         // Group B
-        new("B", "ARG", "ESP", "2026-06-13T18:00:00Z", 3, 1),
-        new("B", "MAR", "KOR", "2026-06-14T21:00:00Z", 1, 1),
-        new("B", "ARG", "MAR", "2026-06-18T18:00:00Z", null, null),
-        new("B", "ESP", "KOR", "2026-06-19T21:00:00Z", null, null),
-        new("B", "ARG", "KOR", "2026-06-24T20:00:00Z", null, null),
-        new("B", "ESP", "MAR", "2026-06-24T23:00:00Z", null, null),
+        new("B", "CAN", "BIH", "2026-06-12T19:00:00Z", 1, 0),
+        new("B", "QAT", "SUI", "2026-06-13T19:00:00Z", 0, 2),
+        new("B", "SUI", "BIH", "2026-06-18T19:00:00Z", null, null),
+        new("B", "CAN", "QAT", "2026-06-18T22:00:00Z", null, null),
+        new("B", "SUI", "CAN", "2026-06-24T19:00:00Z", null, null),
+        new("B", "BIH", "QAT", "2026-06-24T19:00:00Z", null, null),
     ];
 
     private static readonly DemoUser[] DemoUsers =
@@ -56,39 +59,68 @@ public static class DataSeeder
     // Sample predictions per user: (group, home, away, predHome, predAway).
     private static readonly Dictionary<string, (string G, string H, string A, int Ph, int Pa)[]> PredictionData = new()
     {
+        // Mix of played + open, leaving some matches unpredicted on purpose so the history
+        // shows "No predijo" / 0 points too (e.g. user@polla didn't predict QAT–SUI).
         ["user@polla.com"] =
         [
-            ("A", "MEX", "CRO", 2, 1), ("A", "JPN", "GHA", 1, 0),
-            ("B", "ARG", "ESP", 2, 0), ("B", "MAR", "KOR", 1, 1),
-            ("A", "MEX", "JPN", 2, 0), ("B", "ARG", "MAR", 2, 1),
+            ("A", "MEX", "RSA", 2, 0), ("A", "KOR", "CZE", 1, 1),
+            ("B", "CAN", "BIH", 2, 0),
+            ("A", "MEX", "KOR", 2, 1), ("B", "CAN", "QAT", 1, 0),
         ],
         ["ana@polla.com"] =
         [
-            ("A", "MEX", "CRO", 1, 0), ("A", "JPN", "GHA", 0, 0),
-            ("B", "ARG", "ESP", 3, 1), ("B", "MAR", "KOR", 2, 2),
+            ("A", "MEX", "RSA", 2, 0), ("A", "KOR", "CZE", 1, 1),
+            ("B", "CAN", "BIH", 1, 0), ("B", "QAT", "SUI", 0, 1),
         ],
         ["carlos@polla.com"] =
         [
-            ("A", "MEX", "CRO", 2, 1), ("A", "JPN", "GHA", 0, 0),
-            ("B", "ARG", "ESP", 1, 0), ("B", "MAR", "KOR", 0, 1),
+            ("A", "MEX", "RSA", 1, 0), ("A", "KOR", "CZE", 0, 0),
+            ("B", "CAN", "BIH", 1, 0), ("B", "QAT", "SUI", 0, 2),
         ],
         ["valentina@polla.com"] =
         [
-            ("A", "MEX", "CRO", 0, 2), ("A", "JPN", "GHA", 1, 1),
-            ("B", "ARG", "ESP", 2, 1), ("B", "MAR", "KOR", 1, 1),
+            ("A", "MEX", "RSA", 0, 1), ("B", "CAN", "BIH", 1, 0),
+            ("A", "MEX", "KOR", 1, 1), ("B", "SUI", "BIH", 2, 0),
         ],
         ["admin@polla.com"] =
         [
-            ("A", "MEX", "CRO", 3, 2), ("B", "ARG", "ESP", 3, 1),
+            ("A", "MEX", "RSA", 3, 1), ("B", "QAT", "SUI", 0, 2),
         ],
     };
 
     public static async Task SeedAsync(AppDbContext db, UserManager<ApplicationUser> userManager)
     {
+        await ReplaceStaleFixturesAsync(db);
         await SeedTeamsAsync(db);
         await SeedMatchesAsync(db);
         var userIds = await SeedUsersAsync(userManager);
         await SeedPredictionsAsync(db, userIds);
+    }
+
+    /// <summary>
+    /// If the database was seeded with a different set of teams (e.g. an older illustrative
+    /// draw on an already-deployed environment), wipe teams/matches/predictions so the
+    /// idempotent seeders below re-create them with the current real fixtures. Triggers ONLY
+    /// when the team set changes — an admin entering a result never matches, so live results
+    /// are preserved across restarts.
+    /// </summary>
+    private static async Task ReplaceStaleFixturesAsync(AppDbContext db)
+    {
+        if (!await db.Teams.AnyAsync())
+            return;
+
+        var expected = TeamData.Select(t => t.Code).ToHashSet();
+        var current = (await db.Teams.Select(t => t.Code).ToListAsync()).ToHashSet();
+        if (expected.SetEquals(current))
+            return;
+
+        // Wipe in FK order (predictions -> matches -> teams), in one transaction so a crash
+        // mid-way can't leave a half-cleared schema (it would self-heal next start anyway).
+        await using var tx = await db.Database.BeginTransactionAsync();
+        await db.Predictions.ExecuteDeleteAsync();
+        await db.Matches.ExecuteDeleteAsync();
+        await db.Teams.ExecuteDeleteAsync();
+        await tx.CommitAsync();
     }
 
     private static async Task SeedTeamsAsync(AppDbContext db)
