@@ -1,5 +1,10 @@
 # Arquitectura — Polla Mundialista
 
+> **Diagramas (versión en imagen, para presentación):**
+> [despliegue / C4 contenedores](architecture-deployment.png) ·
+> [componentes — Clean Architecture](architecture-components.png).
+> Debajo están las mismas vistas en Mermaid, que se renderizan directamente en GitHub.
+
 ## 1. Vista de despliegue (lo que está en producción)
 
 ```mermaid
@@ -18,7 +23,7 @@ flowchart LR
     end
 
     subgraph cicd["CI/CD — GitHub Actions (OIDC)"]
-      gh["push a main"] --> test["test (17 pruebas) — gate"]
+      gh["push a main"] --> test["test (35 pruebas) — gate"]
       test --> dapi["deploy-api: az acr build → containerapp update"]
       test --> dswa["deploy-frontend: ng build → SWA"]
     end
