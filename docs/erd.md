@@ -55,11 +55,13 @@ erDiagram
 
 ## Datos semilla
 
-- 8 equipos reales en 2 grupos (A y B) → round-robin de 6 partidos por grupo = **12 partidos**.
-- Kickoffs entre el 11 y 27 de junio de 2026 (UTC).
-- La **jornada 1** de cada grupo viene precargada como jugada (4 partidos `Finished`)
-  para poblar el leaderboard en la demo; los 8 restantes quedan abiertos para predecir.
+- **Grupo A y B reales del Mundial 2026** (8 equipos): MEX · RSA · KOR · CZE (grupo A) y
+  CAN · BIH · QAT · SUI (grupo B) → round-robin de 6 partidos por grupo = **12 partidos**,
+  con emparejamientos y kickoffs reales (UTC) entre el 11 y el 25 de junio de 2026.
+- La **jornada 1** de cada grupo viene precargada como jugada (4 partidos `Finished`, con
+  marcadores ilustrativos) para poblar el leaderboard en la demo; los 8 restantes quedan
+  abiertos para predecir.
 - 5 usuarios demo con predicciones de ejemplo (ver credenciales en el README).
-
-> Nota: el sorteo de grupos es **ilustrativo** para la demo; los equipos son reales y
-> las fechas coherentes. Se pueden sustituir por las fixtures oficiales cuando estén.
+- **Re-seed auto-sanador**: si la base trae un set de equipos distinto al esperado, se
+  reemplazan teams/matches/predictions al arrancar, de modo que un nuevo deploy actualiza
+  el seed del entorno ya desplegado.
